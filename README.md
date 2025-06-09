@@ -1,0 +1,1 @@
+# spring-boot-2025-rest-aws-gcp-java-docker
