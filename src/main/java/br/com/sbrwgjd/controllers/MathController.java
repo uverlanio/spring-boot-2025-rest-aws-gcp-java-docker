@@ -14,7 +14,7 @@ public class MathController {
             @PathVariable("num1") double num1,
             @PathVariable("num2") double num2) throws IllegalArgumentException {
 
-        if (!isNumeric(num1) || !isNumeric(num2)) {
+        if (isNumeric(num1) || isNumeric(num2)) {
             throw new IllegalArgumentException();
         }
 
@@ -26,7 +26,7 @@ public class MathController {
             @PathVariable("num1") double num1,
             @PathVariable("num2") double num2) throws IllegalArgumentException {
 
-        if (!isNumeric(num1) || !isNumeric(num2)) {
+        if (isNumeric(num1) || isNumeric(num2)) {
             throw new IllegalArgumentException();
         }
 
@@ -38,7 +38,7 @@ public class MathController {
             @PathVariable("num1") double num1,
             @PathVariable("num2") double num2) throws IllegalArgumentException {
 
-        if (!isNumeric(num1) || !isNumeric(num2) || num2 == 0) {
+        if (isNumeric(num1) || isNumeric(num2) || num2 == 0) {
             throw new IllegalArgumentException();
         }
 
@@ -46,6 +46,6 @@ public class MathController {
     }
 
     private boolean isNumeric(double num) {
-        return !Double.isNaN(num) && !Double.isInfinite(num);
+        return Double.isNaN(num) || Double.isInfinite(num);
     }
 }
