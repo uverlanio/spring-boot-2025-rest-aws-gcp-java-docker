@@ -14,4 +14,8 @@ spring:
       hibernate:
         show-sql: false
         open-in-view: false
+logging:
+  level:
+    # root: warn
+    br.com.sbrwgjd: debug
 
