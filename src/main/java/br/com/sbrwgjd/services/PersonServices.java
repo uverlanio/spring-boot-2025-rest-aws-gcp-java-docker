@@ -1,6 +1,8 @@
 package br.com.sbrwgjd.services;
 
+import br.com.sbrwgjd.data.dto.PersonDTO;
 import br.com.sbrwgjd.exception.ResourceNotFoundException;
+import br.com.sbrwgjd.mapper.ObjectMapper;
 import br.com.sbrwgjd.model.Person;
 import br.com.sbrwgjd.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +39,18 @@ public class PersonServices {
 
     }
 
-    public Person create(Person person) {
+    public PersonDTO create(Person person) {
 
         logger.info("Creating one Person!");
 
-        return personRepository.save(person);
+        Person p = personRepository.save(person);
+
+        PersonDTO dto = ObjectMapper.parseObject(p, PersonDTO.class);
+
+        return dto;
     }
 
-    public Person update(Person person) {
+    public PersonDTO update(PersonDTO person) {
 
         logger.info("Updating one Person!");
 
@@ -57,7 +63,11 @@ public class PersonServices {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        return personRepository.save(entity);
+        Person p = personRepository.save(entity);
+
+        PersonDTO dto = ObjectMapper.parseObject(p, PersonDTO.class);
+
+        return dto;
     }
 
     public void delete(Long id) {

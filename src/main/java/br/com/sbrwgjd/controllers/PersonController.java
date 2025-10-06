@@ -1,5 +1,7 @@
 package br.com.sbrwgjd.controllers;
 
+import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.mapper.ObjectMapper;
 import br.com.sbrwgjd.model.Person;
 import br.com.sbrwgjd.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,9 @@ public class PersonController {
     private PersonServices personServices;
 
     @GetMapping
-    public List<?> findAll(){
-        return personServices.findByAll();
+    public List<PersonDTO> findAll(){
+
+        return ObjectMapper.parseListObjects(personServices.findByAll(), PersonDTO.class);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,21 +44,21 @@ public class PersonController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person create(@RequestBody Person person){
+    public PersonDTO create(@RequestBody Person person){
         return personServices.create(person);
     }
 
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person update(@RequestBody Person person){
+    public PersonDTO update(@RequestBody PersonDTO person){
 
         Person p = personServices.findById(person.getId());
 
         if(Objects.nonNull(p)){
             return personServices.update(person);
         }
-        return new Person();
+        return new PersonDTO();
     }
 
     @DeleteMapping("/{id}")
