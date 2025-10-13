@@ -1,6 +1,7 @@
 package br.com.sbrwgjd.controllers;
 
-import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.data.dto.v1.PersonDTO;
+import br.com.sbrwgjd.data.dto.v2.PersonDTOV2;
 import br.com.sbrwgjd.mapper.ObjectMapper;
 import br.com.sbrwgjd.model.Person;
 import br.com.sbrwgjd.services.PersonServices;
@@ -46,6 +47,13 @@ public class PersonController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonDTO create(@RequestBody Person person){
         return personServices.create(person);
+    }
+
+    @PostMapping(value = "/v2",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public PersonDTOV2 createV2(@RequestBody PersonDTOV2 person){
+        return personServices.createV2(person);
     }
 
     @PutMapping(

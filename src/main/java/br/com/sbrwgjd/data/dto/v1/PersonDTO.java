@@ -1,4 +1,4 @@
-package br.com.sbrwgjd.data.dto;
+package br.com.sbrwgjd.data.dto.v1;
 
 import br.com.sbrwgjd.model.Gender;
 

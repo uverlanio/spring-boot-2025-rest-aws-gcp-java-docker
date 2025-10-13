@@ -1,8 +1,10 @@
 package br.com.sbrwgjd.services;
 
-import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.data.dto.v1.PersonDTO;
+import br.com.sbrwgjd.data.dto.v2.PersonDTOV2;
 import br.com.sbrwgjd.exception.ResourceNotFoundException;
 import br.com.sbrwgjd.mapper.ObjectMapper;
+import br.com.sbrwgjd.mapper.custom.PersonMapper;
 import br.com.sbrwgjd.model.Person;
 import br.com.sbrwgjd.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class PersonServices {
 
     @Autowired
     PersonRepository personRepository;
+
+    @Autowired
+    PersonMapper converter;
 
     public List<Person> findByAll(){
 
@@ -46,6 +51,16 @@ public class PersonServices {
         Person p = personRepository.save(person);
 
         return ObjectMapper.parseObject(p, PersonDTO.class);
+    }
+    public PersonDTOV2 createV2(PersonDTOV2 person) {
+
+        logger.info("Creating one Person V2!");
+
+        var entity =  converter.convertDTOToEntity(person);
+
+        Person p = personRepository.save(entity);
+
+        return converter.convertEntityToDTO(p);
     }
 
     public PersonDTO update(PersonDTO person) {

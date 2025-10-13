@@ -1,6 +1,6 @@
 package br.com.sbrwgjd.unittests.mapper.mocks;
 
-import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.data.dto.v1.PersonDTO;
 import br.com.sbrwgjd.model.Gender;
 import br.com.sbrwgjd.model.Person;
 
