@@ -1,25 +1,23 @@
 package br.com.sbrwgjd.data.dto;
 
 import br.com.sbrwgjd.model.Gender;
-import br.com.sbrwgjd.model.Person;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PersonDTO {
+public class PersonDTO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
-
 
     private Long id;
 
-
     private String firstName;
-
 
     private String lastName;
 
     private String address;
-
 
     private Gender gender;
 

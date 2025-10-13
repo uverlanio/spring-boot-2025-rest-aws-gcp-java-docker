@@ -45,9 +45,7 @@ public class PersonServices {
 
         Person p = personRepository.save(person);
 
-        PersonDTO dto = ObjectMapper.parseObject(p, PersonDTO.class);
-
-        return dto;
+        return ObjectMapper.parseObject(p, PersonDTO.class);
     }
 
     public PersonDTO update(PersonDTO person) {
@@ -65,9 +63,7 @@ public class PersonServices {
 
         Person p = personRepository.save(entity);
 
-        PersonDTO dto = ObjectMapper.parseObject(p, PersonDTO.class);
-
-        return dto;
+        return ObjectMapper.parseObject(p, PersonDTO.class);
     }
 
     public void delete(Long id) {
