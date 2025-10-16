@@ -9,7 +9,7 @@ spring:
     password: admin
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none # importante na utilizacao de migration (somente leitura)
     properties:
       hibernate:
         show-sql: false
