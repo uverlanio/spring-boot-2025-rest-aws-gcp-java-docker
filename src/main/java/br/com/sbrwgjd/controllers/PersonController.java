@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,17 +29,13 @@ public class PersonController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findById(@PathVariable("id") Long id){
+    public PersonDTO findById(@PathVariable("id") Long id){
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(id)
-                .toUri();
+        var person = personServices.findById(id);
 
-        return ResponseEntity
-                .created(location)
-                .body(personServices.findById(id));
+        person.setBirthDay(new Date());
+
+        return person;
     }
 
     @PostMapping(
@@ -53,7 +50,7 @@ public class PersonController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonDTO update(@RequestBody PersonDTO person){
 
-        Person p = personServices.findById(person.getId());
+        var p = personServices.findById(person.getId());
 
         if(Objects.nonNull(p)){
             return personServices.update(person);
@@ -64,7 +61,7 @@ public class PersonController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
 
-        Person p = personServices.findById(id);
+        var p = personServices.findById(id);
 
         if(Objects.nonNull(p)){
             personServices.delete(p.getId());

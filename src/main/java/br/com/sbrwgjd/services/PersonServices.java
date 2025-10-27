@@ -8,6 +8,7 @@ import br.com.sbrwgjd.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
@@ -29,14 +30,15 @@ public class PersonServices {
         return personRepository.findAll();
     }
 
-    public Person findById(Long id){
+    public PersonDTO findById(Long id){
 
         logger.info("Finding one Person!");
 
-        return personRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("No records found for this id.")
-        );
+        var person = personRepository.findById(id).orElseThrow();
 
+        ObjectMapper.parseObject(person, PersonDTO.class);
+
+        return ObjectMapper.parseObject(person, PersonDTO.class);
     }
 
     public PersonDTO create(Person person) {

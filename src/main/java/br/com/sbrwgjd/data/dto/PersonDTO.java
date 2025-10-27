@@ -1,11 +1,19 @@
 package br.com.sbrwgjd.data.dto;
 
 import br.com.sbrwgjd.model.Gender;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
+//@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender"})
+@Data
 public class PersonDTO implements Serializable {
 
     @Serial
@@ -17,11 +25,12 @@ public class PersonDTO implements Serializable {
 
     private String lastName;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date birthDay;
+
     private String address;
 
     private Gender gender;
-
-    public PersonDTO() {}
 
     public Long getId() {
         return id;
@@ -47,6 +56,14 @@ public class PersonDTO implements Serializable {
         this.lastName = lastName;
     }
 
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -67,12 +84,12 @@ public class PersonDTO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDTO person = (PersonDTO) o;
-        return Objects.equals(id, person.id) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(address, person.address) && gender == person.gender;
+        PersonDTO personDTO = (PersonDTO) o;
+        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && gender == personDTO.gender;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, address, gender);
+        return Objects.hash(id, firstName, lastName, birthDay, address, gender);
     }
 }
