@@ -1,11 +1,9 @@
 package br.com.sbrwgjd.data.dto;
 
-import br.com.sbrwgjd.model.Gender;
+import br.com.sbrwgjd.serializer.GenderSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -30,7 +28,8 @@ public class PersonDTO implements Serializable {
 
     private String address;
 
-    private Gender gender;
+    @JsonSerialize(using = GenderSerializer.class)
+    private String gender;
 
     public Long getId() {
         return id;
@@ -72,11 +71,11 @@ public class PersonDTO implements Serializable {
         this.address = address;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 

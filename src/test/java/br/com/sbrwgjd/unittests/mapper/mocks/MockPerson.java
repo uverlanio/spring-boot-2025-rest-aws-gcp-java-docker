@@ -1,7 +1,6 @@
 package br.com.sbrwgjd.unittests.mapper.mocks;
 
 import br.com.sbrwgjd.data.dto.PersonDTO;
-import br.com.sbrwgjd.model.Gender;
 import br.com.sbrwgjd.model.Person;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class MockPerson {
         Person person = new Person();
         person.setAddress("Address Test" + number);
         person.setFirstName("First Name Test" + number);
-        person.setGender(((number % 2)==0) ? Gender.Male : Gender.Female);
+        person.setGender(((number % 2)==0) ? "Male" : "Female");
         person.setId(number.longValue());
         person.setLastName("Last Name Test" + number);
         return person;
@@ -48,7 +47,7 @@ public class MockPerson {
         PersonDTO person = new PersonDTO();
         person.setAddress("Address Test" + number);
         person.setFirstName("First Name Test" + number);
-        person.setGender(((number % 2)==0) ? Gender.Male : Gender.Female);
+        person.setGender(((number % 2)==0) ? "Male" : "Female");
         person.setId(number.longValue());
         person.setLastName("Last Name Test" + number);
         return person;

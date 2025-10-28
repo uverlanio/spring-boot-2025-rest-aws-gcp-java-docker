@@ -7,7 +7,6 @@ import java.util.List;
 
 import br.com.sbrwgjd.data.dto.PersonDTO;
 
-import br.com.sbrwgjd.model.Gender;
 import br.com.sbrwgjd.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ public class ObjectMapperTests {
         assertEquals("First Name Test0", output.getFirstName());
         assertEquals("Last Name Test0", output.getLastName());
         assertEquals("Address Test0", output.getAddress());
-        assertEquals(Gender.Male, output.getGender());
+        assertEquals("Male", output.getGender());
     }
 
     @Test
@@ -41,7 +40,7 @@ public class ObjectMapperTests {
         assertEquals("First Name Test0", outputZero.getFirstName());
         assertEquals("Last Name Test0", outputZero.getLastName());
         assertEquals("Address Test0", outputZero.getAddress());
-        assertEquals(Gender.Male, outputZero.getGender());
+        assertEquals("Male", outputZero.getGender());
 
         PersonDTO outputSeven = outputList.get(7);
 
@@ -49,7 +48,7 @@ public class ObjectMapperTests {
         assertEquals("First Name Test7", outputSeven.getFirstName());
         assertEquals("Last Name Test7", outputSeven.getLastName());
         assertEquals("Address Test7", outputSeven.getAddress());
-        assertEquals(Gender.Female, outputSeven.getGender());
+        assertEquals("Female", outputSeven.getGender());
 
         PersonDTO outputTwelve = outputList.get(12);
 
@@ -57,7 +56,7 @@ public class ObjectMapperTests {
         assertEquals("First Name Test12", outputTwelve.getFirstName());
         assertEquals("Last Name Test12", outputTwelve.getLastName());
         assertEquals("Address Test12", outputTwelve.getAddress());
-        assertEquals(Gender.Male, outputTwelve.getGender());
+        assertEquals("Male", outputTwelve.getGender());
     }
 
     @Test
@@ -67,7 +66,7 @@ public class ObjectMapperTests {
         assertEquals("First Name Test0", output.getFirstName());
         assertEquals("Last Name Test0", output.getLastName());
         assertEquals("Address Test0", output.getAddress());
-        assertEquals(Gender.Male, output.getGender());
+        assertEquals("Male", output.getGender());
     }
 
     @Test
@@ -79,7 +78,7 @@ public class ObjectMapperTests {
         assertEquals("First Name Test0", outputZero.getFirstName());
         assertEquals("Last Name Test0", outputZero.getLastName());
         assertEquals("Address Test0", outputZero.getAddress());
-        assertEquals(Gender.Male, outputZero.getGender());
+        assertEquals("Male", outputZero.getGender());
 
         Person outputSeven = outputList.get(7);
 
@@ -87,7 +86,7 @@ public class ObjectMapperTests {
         assertEquals("First Name Test7", outputSeven.getFirstName());
         assertEquals("Last Name Test7", outputSeven.getLastName());
         assertEquals("Address Test7", outputSeven.getAddress());
-        assertEquals(Gender.Female, outputSeven.getGender());
+        assertEquals("Female", outputSeven.getGender());
 
         Person outputTwelve = outputList.get(12);
 
@@ -95,6 +94,6 @@ public class ObjectMapperTests {
         assertEquals("First Name Test12", outputTwelve.getFirstName());
         assertEquals("Last Name Test12", outputTwelve.getLastName());
         assertEquals("Address Test12", outputTwelve.getAddress());
-        assertEquals(Gender.Male, outputTwelve.getGender());
+        assertEquals("Male", outputTwelve.getGender());
     }
 }

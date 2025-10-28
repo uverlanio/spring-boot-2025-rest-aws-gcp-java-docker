@@ -25,7 +25,7 @@ public class Person implements Serializable {
     private String address;
 
     @Column(nullable = false)
-    private Gender gender;
+    private String gender;
 
     public Person() {}
 
@@ -61,11 +61,11 @@ public class Person implements Serializable {
         this.address = address;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
