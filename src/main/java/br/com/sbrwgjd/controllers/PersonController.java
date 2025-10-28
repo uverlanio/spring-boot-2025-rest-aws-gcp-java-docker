@@ -34,6 +34,7 @@ public class PersonController {
         var person = personServices.findById(id);
 
         person.setBirthDay(new Date());
+        person.setPhoneNumber("+55 (34) 98765-4321");
 
         return person;
     }
