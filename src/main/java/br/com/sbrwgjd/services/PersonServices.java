@@ -2,6 +2,7 @@ package br.com.sbrwgjd.services;
 
 import br.com.sbrwgjd.controllers.PersonController;
 import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.exception.RequiredObjectIsNullException;
 import br.com.sbrwgjd.exception.ResourceNotFoundException;
 import br.com.sbrwgjd.mapper.ObjectMapper;
 import br.com.sbrwgjd.model.Person;
@@ -12,16 +13,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
 public class PersonServices {
 
-    private final AtomicLong counter = new AtomicLong();
     Logger logger = LoggerFactory.getLogger(PersonServices.class.getName());
 
     @Autowired
@@ -51,6 +50,9 @@ public class PersonServices {
 
     public PersonDTO create(PersonDTO personDTO) {
 
+        if(personDTO == null) throw new RequiredObjectIsNullException();
+
+
         logger.info("Creating one Person!");
 
         var entity = ObjectMapper.parseObject(personDTO, Person.class);
@@ -60,18 +62,20 @@ public class PersonServices {
         return dto;
     }
 
-    public PersonDTO update(PersonDTO person) {
+    public PersonDTO update(PersonDTO personDTO) {
+
+        if(personDTO == null) throw new RequiredObjectIsNullException();
 
         logger.info("Updating one Person!");
 
-        Person entity = personRepository.findById(person.getId()).orElseThrow(
+        Person entity = personRepository.findById(personDTO.getId()).orElseThrow(
                 () -> new ResourceNotFoundException("No records found for this id.")
         );
 
-        entity.setFirstName(person.getFirstName());
-        entity.setLastName((person.getLastName()));
-        entity.setAddress(person.getAddress());
-        entity.setGender(person.getGender());
+        entity.setFirstName(personDTO.getFirstName());
+        entity.setLastName((personDTO.getLastName()));
+        entity.setAddress(personDTO.getAddress());
+        entity.setGender(personDTO.getGender());
 
         var dto = ObjectMapper.parseObject(personRepository.save(entity), PersonDTO.class);
         addHateoasLinks(dto);
