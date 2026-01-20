@@ -30,7 +30,7 @@ public class PersonController {
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     public List<PersonDTO> findAll(){
 
-        return ObjectMapper.parseListObjects(personServices.findByAll(), PersonDTO.class);
+        return personServices.findByAll();
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
@@ -47,7 +47,7 @@ public class PersonController {
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-    public PersonDTO create(@RequestBody Person person){
+    public PersonDTO create(@RequestBody PersonDTO person){
         return personServices.create(person);
     }
 
