@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import br.com.sbrwgjd.model.Person;
 
-public class ObjectMapperTests {
+public class PersonMapperTests {
     MockPerson inputObject;
 
     @BeforeEach
