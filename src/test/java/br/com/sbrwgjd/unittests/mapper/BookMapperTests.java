@@ -20,7 +20,7 @@ public class BookMapperTests {
 
     @Test
     public void parseEntityToDTOTest() {
-        BookDTO output = parseObject(inputObject.mockEntity(), BookDTO.class);
+        BooksDTO output = parseObject(inputObject.mockEntity(), BooksDTO.class);
         assertEquals(0L, output.getId());
         assertEquals("O Hobbit0", output.getTitle());
         assertEquals("J.R.R. Tolkien0", output.getAuthor());
@@ -29,22 +29,22 @@ public class BookMapperTests {
 
     @Test
     public void parseEntityListToDTOListTest() {
-        List<BookDTO> outputList = parseListObjects(inputObject.mockEntityList(), BookDTO.class);
-        BookDTO outputZero = outputList.getFirst();
+        List<BooksDTO> outputList = parseListObjects(inputObject.mockEntityList(), BooksDTO.class);
+        BooksDTO outputZero = outputList.getFirst();
 
         assertEquals(Long.valueOf(0L), outputZero.getId());
         assertEquals("O Hobbit0", outputZero.getTitle());
         assertEquals("J.R.R. Tolkien0", outputZero.getAuthor());
         assertEquals(125.50, outputZero.getPrice());
 
-        BookDTO outputSeven = outputList.get(7);
+        BooksDTO outputSeven = outputList.get(7);
 
         assertEquals(Long.valueOf(7L), outputSeven.getId());
         assertEquals("O Hobbit7", outputSeven.getTitle());
         assertEquals("J.R.R. Tolkien7", outputSeven.getAuthor());
         assertEquals(125.50, outputSeven.getPrice());
 
-        BookDTO outputTwelve = outputList.get(12);
+        BooksDTO outputTwelve = outputList.get(12);
 
         assertEquals(Long.valueOf(12L), outputTwelve.getId());
         assertEquals("O Hobbit12", outputTwelve.getTitle());

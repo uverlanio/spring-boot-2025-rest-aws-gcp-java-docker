@@ -20,14 +20,14 @@ public class BookController implements BookControllerDocs {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
    // @Override
-    public List<BookDTO> findAll(){
+    public List<BooksDTO> findAll(){
 
         return bookServices.findByAll();
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
    // @Override
-    public BookDTO findById(@PathVariable("id") Long id){
+    public BooksDTO findById(@PathVariable("id") Long id){
 
         return bookServices.findById(id);
     }
@@ -37,7 +37,7 @@ public class BookController implements BookControllerDocs {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}
     )
    // @Override
-    public BookDTO create(@RequestBody BookDTO book){
+    public BooksDTO create(@RequestBody BooksDTO book){
         return bookServices.create(book);
     }
 
@@ -46,14 +46,14 @@ public class BookController implements BookControllerDocs {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}
     )
    // @Override
-    public BookDTO update(@RequestBody BookDTO book){
+    public BooksDTO update(@RequestBody BooksDTO book){
 
         var b = bookServices.findById(book.getId());
 
         if(Objects.nonNull(b)){
             return bookServices.update(book);
         }
-        return new BookDTO();
+        return new BooksDTO();
     }
 
     @DeleteMapping("/{id}")

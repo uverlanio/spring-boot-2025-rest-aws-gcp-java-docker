@@ -13,7 +13,7 @@ public class MockBook {
         return mockEntity(0);
     }
     
-    public BookDTO mockDTO() {
+    public BooksDTO mockDTO() {
         return mockDTO(0);
     }
     
@@ -25,8 +25,8 @@ public class MockBook {
         return books;
     }
 
-    public List<BookDTO> mockDTOList() {
-        List<BookDTO> books = new ArrayList<>();
+    public List<BooksDTO> mockDTOList() {
+        List<BooksDTO> books = new ArrayList<>();
         for (int i = 0; i < 14; i++) {
             books.add(mockDTO(i));
         }
@@ -43,8 +43,8 @@ public class MockBook {
         return book;
     }
 
-    public BookDTO mockDTO(Integer number) {
-        BookDTO book = new BookDTO();
+    public BooksDTO mockDTO(Integer number) {
+        BooksDTO book = new BooksDTO();
         book.setTitle("O Hobbit"+number);
         book.setAuthor("J.R.R. Tolkien"+number);
         book.setLaunch_date(Timestamp.from(Instant.now()));

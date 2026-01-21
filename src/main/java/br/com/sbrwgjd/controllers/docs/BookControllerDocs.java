@@ -21,7 +21,7 @@ public interface BookControllerDocs {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            array = @ArraySchema(schema = @Schema(implementation = BookDTO.class))
+                                            array = @ArraySchema(schema = @Schema(implementation = BooksDTO.class))
                                     )
                             }),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
@@ -31,7 +31,7 @@ public interface BookControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    List<BookDTO> findAll();
+    List<BooksDTO> findAll();
 
     @Operation(summary = "Finds a Book",
             description = "Find a specific Book by your ID",
@@ -41,7 +41,7 @@ public interface BookControllerDocs {
                             description = "Success",
                             responseCode = "200",
                             content =
-                            @Content(schema = @Schema(implementation = BookDTO.class))
+                            @Content(schema = @Schema(implementation = BooksDTO.class))
                     ),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -50,7 +50,7 @@ public interface BookControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    BookDTO findById(@PathVariable("id") Long id);
+    BooksDTO findById(@PathVariable("id") Long id);
 
     @Operation(summary = "Adds a new Book",
             description = "Adds a new book by passing in a JSON, XML or YML representation of the book.",
@@ -62,7 +62,7 @@ public interface BookControllerDocs {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            array = @ArraySchema(schema = @Schema(implementation = BookDTO.class))
+                                            array = @ArraySchema(schema = @Schema(implementation = BooksDTO.class))
                                     )
                             }),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
@@ -72,7 +72,7 @@ public interface BookControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    BookDTO create(@RequestBody BookDTO person);
+    BooksDTO create(@RequestBody BooksDTO person);
 
     @Operation(summary = "Updates a book's information",
             description = "Update a specific book by your ID.",
@@ -84,7 +84,7 @@ public interface BookControllerDocs {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            array = @ArraySchema(schema = @Schema(implementation = BookDTO.class))
+                                            array = @ArraySchema(schema = @Schema(implementation = BooksDTO.class))
                                     )
                             }),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
@@ -94,7 +94,7 @@ public interface BookControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-    BookDTO update(@RequestBody BookDTO person);
+    BooksDTO update(@RequestBody BooksDTO person);
 
     @Operation(summary = "Deletes a Book",
             description = "Deletes a specific book by their ID",
@@ -106,7 +106,7 @@ public interface BookControllerDocs {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            array = @ArraySchema(schema = @Schema(implementation = BookDTO.class))
+                                            array = @ArraySchema(schema = @Schema(implementation = BooksDTO.class))
                                     )
                             }),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),

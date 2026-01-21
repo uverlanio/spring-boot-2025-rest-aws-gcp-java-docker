@@ -4,10 +4,9 @@ import org.springframework.hateoas.*;
 
 import java.io.*;
 import java.sql.*;
-import java.time.*;
 import java.util.*;
 
-public class BookDTO extends RepresentationModel<BookDTO> implements Serializable {
+public class BooksDTO extends RepresentationModel<BooksDTO> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -66,8 +65,8 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        BookDTO bookDTO = (BookDTO) o;
-        return Double.compare(price, bookDTO.price) == 0 && Objects.equals(id, bookDTO.id) && Objects.equals(author, bookDTO.author) && Objects.equals(launch_date, bookDTO.launch_date) && Objects.equals(title, bookDTO.title);
+        BooksDTO booksDTO = (BooksDTO) o;
+        return Double.compare(price, booksDTO.price) == 0 && Objects.equals(id, booksDTO.id) && Objects.equals(author, booksDTO.author) && Objects.equals(launch_date, booksDTO.launch_date) && Objects.equals(title, booksDTO.title);
     }
 
     @Override

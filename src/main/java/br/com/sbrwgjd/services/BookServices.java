@@ -22,42 +22,41 @@ public class BookServices {
     @Autowired
     BookRepository bookRepository;
 
-    public List<BookDTO> findByAll(){
+    public List<BooksDTO> findByAll(){
 
         logger.info("Finding all People!");
 
-        var books = ObjectMapper.parseListObjects(bookRepository.findAll(), BookDTO.class);
+        var books = ObjectMapper.parseListObjects(bookRepository.findAll(), BooksDTO.class);
         books.forEach(this::addHateoasLinks);
 
         return books;
     }
 
-    public BookDTO findById(Long id){
+    public BooksDTO findById(Long id){
 
         logger.info("Finding one Book!");
 
         var entity = bookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
-        var dto = ObjectMapper.parseObject(entity, BookDTO.class);
+        var dto = ObjectMapper.parseObject(entity, BooksDTO.class);
         addHateoasLinks(dto);
         return dto;
     }
 
-    public BookDTO create(BookDTO BookDTO) {
+    public BooksDTO create(BooksDTO bookDTO) {
 
-        if(BookDTO == null) throw new RequiredObjectIsNullException();
+        if(bookDTO == null) throw new RequiredObjectIsNullException();
 
         logger.info("Creating one Book!");
 
-        var entity = ObjectMapper.parseObject(BookDTO, Books.class);
-
-        var dto = ObjectMapper.parseObject(bookRepository.save(entity), BookDTO.class);
+        var entity = ObjectMapper.parseObject(bookDTO, Books.class);
+        var dto = ObjectMapper.parseObject(bookRepository.save(entity), BooksDTO.class);
         addHateoasLinks(dto);
         return dto;
     }
 
-    public BookDTO update(BookDTO bookDTO) {
+    public BooksDTO update(BooksDTO bookDTO) {
 
         if(bookDTO == null) throw new RequiredObjectIsNullException();
 
@@ -71,7 +70,7 @@ public class BookServices {
         entity.setAuthor((bookDTO.getAuthor()));
         entity.setPrice(bookDTO.getPrice());
 
-        var dto = ObjectMapper.parseObject(bookRepository.save(entity), BookDTO.class);
+        var dto = ObjectMapper.parseObject(bookRepository.save(entity), BooksDTO.class);
         addHateoasLinks(dto);
 
         return dto;
@@ -88,7 +87,7 @@ public class BookServices {
         bookRepository.delete(entity);
     }
 
-    private void addHateoasLinks(BookDTO dto) {
+    private void addHateoasLinks(BooksDTO dto) {
         dto.add(linkTo(methodOn(BookController.class).findById(dto.getId())).withSelfRel().withType("GET"));
         dto.add(linkTo(methodOn(BookController.class).findAll()).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(BookController.class).create(dto)).withRel("create").withType("POST"));

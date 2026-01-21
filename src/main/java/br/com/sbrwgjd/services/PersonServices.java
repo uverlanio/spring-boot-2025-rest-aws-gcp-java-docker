@@ -52,7 +52,6 @@ public class PersonServices {
 
         if(personDTO == null) throw new RequiredObjectIsNullException();
 
-
         logger.info("Creating one Person!");
 
         var entity = ObjectMapper.parseObject(personDTO, Person.class);
