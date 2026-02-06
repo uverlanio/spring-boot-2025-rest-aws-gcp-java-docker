@@ -1,1 +1,26 @@
-spring.application.name=spring-boot-2025-rest-aws-gcp-java-docker
+spring:
+  server: 8888
+  application:
+    name:
+      spring-boot-2025-rest-aws-gcp-java-docker
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none # importante na utilizacao de migration (somente leitura)
+    properties:
+      hibernate:
+        show-sql: false
+        open-in-view: false
+logging:
+  level:
+    root: INFO
+    br.com.sbrwgjd: debug
+  spring-doc:
+    paths-to-match: /api/**/v1/**
+    swagger-ui:
+      use-root-path: true
+
+  docker:
+    host:tcp://localhost:2375
+
