@@ -28,7 +28,6 @@ public class PersonController implements PersonControllerDocs {
         return personServices.findByAll();
     }
 
-    @CrossOrigin(origins = {"http://localhost:8080","http://prontuarios-jaala.com"})
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
     public PersonDTO findById(@PathVariable("id") Long id){
@@ -41,7 +40,6 @@ public class PersonController implements PersonControllerDocs {
         return person;
     }
 
-    @CrossOrigin(origins = {"http://localhost:8080"})
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}

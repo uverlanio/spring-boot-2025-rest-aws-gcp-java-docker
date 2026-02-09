@@ -5,28 +5,24 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.test.context.ContextConfiguration;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.lifecycle.Startables;
+//import org.testcontainers.containers.MySQLContainer;
+//import org.testcontainers.lifecycle.Startables;
 
 import java.util.Map;
 import java.util.stream.Stream;
 
-@ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
+/*@ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
 public class AbstractIntegrationTest {
+
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-        static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:9.0.1");
+        static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:9.1.0");
 
         private static void startContainers() {
             Startables.deepStart(Stream.of(mysql)).join();
         }
 
         private static Map<String, String> createConnectionConfiguration() {
-
-            System.out.println("JDBC URL: " + mysql.getJdbcUrl());
-            System.out.println("Username: " + mysql.getUsername());
-            System.out.println("Password: " + mysql.getPassword());
-
             return Map.of(
                     "spring.datasource.url", mysql.getJdbcUrl(),
                     "spring.datasource.username", mysql.getUsername(),
@@ -38,10 +34,9 @@ public class AbstractIntegrationTest {
         public void initialize(ConfigurableApplicationContext applicationContext) {
             startContainers();
             ConfigurableEnvironment environment = applicationContext.getEnvironment();
-            MapPropertySource testcontainers = new MapPropertySource(
-                    "testcontainers",
+            MapPropertySource testcontainers = new MapPropertySource("testcontainers",
                     (Map) createConnectionConfiguration());
             environment.getPropertySources().addFirst(testcontainers);
         }
     }
-}
+}*/

@@ -1,15 +1,14 @@
 package br.com.sbrwgjd.integrationtests.swagger;
 
-import br.com.sbrwgjd.config.*;
-import br.com.sbrwgjd.integrationtests.testcontainers.*;
-import org.junit.*;
-import org.springframework.boot.test.context.*;
+import br.com.sbrwgjd.config.TestConfigs;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static io.restassured.RestAssured.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT) //pega a porta do properties de teste
-public class SwaggerIntegrationTest extends AbstractIntegrationTest {
+public class SwaggerIntegrationTest {
 
     @Test
     public void shouldDisplaySwaggerUIPage(){
