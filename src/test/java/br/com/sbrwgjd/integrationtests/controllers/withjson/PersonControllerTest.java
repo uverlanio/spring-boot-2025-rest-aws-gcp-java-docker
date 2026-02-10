@@ -118,6 +118,7 @@ class PersonControllerTest {
     @Test
     @Order(3)
     void findById() throws JsonProcessingException {
+        person.setId(11L);
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
@@ -202,6 +203,7 @@ class PersonControllerTest {
     }
 
     private void mockPerson() {
+
         person.setFirstName("Richard");
         person.setLastName("Stallman");
         person.setAddress("New York City - New York - USA");
