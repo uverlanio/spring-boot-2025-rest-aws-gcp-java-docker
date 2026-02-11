@@ -1,17 +1,23 @@
-package br.com.sbrwgjd.integrationtests.controllers.withjson;
+package br.com.sbrwgjd.integrationtests.controllers.withyaml;
 
-import br.com.sbrwgjd.config.*;
-import br.com.sbrwgjd.integrationtests.dto.*;
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.datatype.jsr310.*;
-import io.restassured.builder.*;
-import io.restassured.filter.log.*;
-import io.restassured.specification.*;
-import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.*;
-import org.springframework.http.*;
+import br.com.sbrwgjd.config.TestConfigs;
+import br.com.sbrwgjd.integrationtests.controllers.withyaml.mapper.*;
+import br.com.sbrwgjd.integrationtests.dto.PersonDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.*;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.*;
+import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 
 import java.util.*;
 
@@ -28,16 +34,15 @@ import static org.junit.jupiter.api.Assertions.*;
         }
 )
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PersonControllerJsonTest {
+class PersonControllerYamlTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper mapper;
+    private static YAMLMapper mapper;
     private static PersonDTO person;
 
     @BeforeAll
     static void setUp() {
-        mapper = new ObjectMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper = new YAMLMapper();
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
@@ -56,20 +61,27 @@ class PersonControllerJsonTest {
 
         mockPerson();
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .body(person)
+        var createdPerson = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+                    .body(person, mapper)
                 .when()
                     .post()
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
-                        .asString();
-
-        PersonDTO createdPerson = mapper.readValue(content, PersonDTO.class);
-        person = createdPerson; // para a informação ser reutilizada no próximo teste
+                        .as(PersonDTO.class, mapper);
+        
+        person = createdPerson;
 
         assertNotNull(createdPerson.getId());
         assertTrue(createdPerson.getId() > 0);
@@ -87,19 +99,26 @@ class PersonControllerJsonTest {
 
         person.setLastName("Benedict Torvalds");
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .body(person)
+        var createdPerson = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+                    .body(person, mapper)
                 .when()
                     .put()
                 .then()
                     .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
-                        .asString();
+                        .as(PersonDTO.class, mapper);
 
-        PersonDTO createdPerson = mapper.readValue(content, PersonDTO.class);
         person = createdPerson;
 
         assertNotNull(createdPerson.getId());
@@ -115,19 +134,25 @@ class PersonControllerJsonTest {
     @Order(3)
     void findByIdTest() throws JsonProcessingException {
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        var createdPerson = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParams("id", person.getId())
                 .when()
                     .get("{id}")
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
-                        .asString();
+                        .as(PersonDTO.class, mapper);
 
-        PersonDTO createdPerson = mapper.readValue(content, PersonDTO.class);
         person = createdPerson;
 
         assertNotNull(createdPerson.getId());
@@ -143,19 +168,25 @@ class PersonControllerJsonTest {
     @Order(4)
     void disableTest() throws JsonProcessingException {
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        var createdPerson = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParams("id", person.getId())
                 .when()
                     .patch("{id}")
                 .then()
                     .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
-                        .asString();
+                        .as(PersonDTO.class, mapper);
 
-        PersonDTO createdPerson = mapper.readValue(content, PersonDTO.class);
         person = createdPerson;
 
         assertNotNull(createdPerson.getId());
@@ -171,18 +202,26 @@ class PersonControllerJsonTest {
     @Order(5)
     void findAllTest() throws JsonProcessingException {
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        var content = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .when()
                 .get()
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
-                .asString();
+                .as(PersonDTO[].class, mapper);
 
-        List<PersonDTO> persons = mapper.readValue(content, new TypeReference<>() {});
+        List<PersonDTO> persons = Arrays.asList(content);
 
         assertNotNull(persons.get(9).getId());
         assertTrue(persons.get(9).getId() > 0);
@@ -198,7 +237,7 @@ class PersonControllerJsonTest {
     void delete() throws JsonProcessingException {
 
         given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .pathParams("id", person.getId())
                 .when()
                     .delete("{id}")

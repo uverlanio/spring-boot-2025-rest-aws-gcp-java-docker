@@ -1,11 +1,11 @@
-package br.com.sbrwgjd.integrationtests.controllers.withjson;
+package br.com.sbrwgjd.integrationtests.controllers.withxml;
 
 import br.com.sbrwgjd.config.*;
 import br.com.sbrwgjd.integrationtests.dto.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.datatype.jsr310.*;
+import com.fasterxml.jackson.dataformat.xml.*;
 import io.restassured.builder.*;
 import io.restassured.filter.log.*;
 import io.restassured.specification.*;
@@ -28,15 +28,15 @@ import static org.junit.jupiter.api.Assertions.*;
         }
 )
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PersonControllerJsonTest {
+class PersonControllerXmlTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper mapper;
+    private static XmlMapper mapper;
     private static PersonDTO person;
 
     @BeforeAll
     static void setUp() {
-        mapper = new ObjectMapper();
+        mapper = new XmlMapper();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         specification = new RequestSpecBuilder()
@@ -57,13 +57,14 @@ class PersonControllerJsonTest {
         mockPerson();
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                     .body(person)
                 .when()
                     .post()
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(MediaType.APPLICATION_XML_VALUE)
                 .extract()
                     .body()
                         .asString();
@@ -88,13 +89,14 @@ class PersonControllerJsonTest {
         person.setLastName("Benedict Torvalds");
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                     .body(person)
                 .when()
                     .put()
                 .then()
                     .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
                 .extract()
                     .body()
                         .asString();
@@ -116,13 +118,13 @@ class PersonControllerJsonTest {
     void findByIdTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                 .pathParams("id", person.getId())
                 .when()
                     .get("{id}")
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(MediaType.APPLICATION_XML_VALUE)
                 .extract()
                     .body()
                         .asString();
@@ -144,13 +146,13 @@ class PersonControllerJsonTest {
     void disableTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                 .pathParams("id", person.getId())
                 .when()
                     .patch("{id}")
                 .then()
                     .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
                 .extract()
                     .body()
                         .asString();
@@ -172,12 +174,12 @@ class PersonControllerJsonTest {
     void findAllTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                 .when()
                 .get()
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
                 .extract()
                 .body()
                 .asString();
@@ -198,7 +200,7 @@ class PersonControllerJsonTest {
     void delete() throws JsonProcessingException {
 
         given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
                 .pathParams("id", person.getId())
                 .when()
                     .delete("{id}")

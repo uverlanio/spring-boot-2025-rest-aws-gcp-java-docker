@@ -1,12 +1,13 @@
 package br.com.sbrwgjd.integrationtests.dto;
 
 import com.fasterxml.jackson.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 import java.io.Serializable;
 import java.time.*;
-import java.util.Date;
 import java.util.Objects;
 
+@XmlRootElement
 public class PersonDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,8 +16,8 @@ public class PersonDTO implements Serializable {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate birthDay;
+    /*@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate birthDay;*/
     private String address;
     private String gender;
     private Boolean enabled;
@@ -53,13 +54,13 @@ public class PersonDTO implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public LocalDate getBirthDay() {
+    /*public LocalDate getBirthDay() {
         return birthDay;
     }
 
     public void setBirthDay(LocalDate birthDay) {
         this.birthDay = birthDay;
-    }
+    }*/
 
     public String getAddress() {
         return address;
@@ -89,11 +90,11 @@ public class PersonDTO implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PersonDTO personDTO = (PersonDTO) o;
-        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(phoneNumber, personDTO.phoneNumber) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && Objects.equals(gender, personDTO.gender) && Objects.equals(enabled, personDTO.enabled);
+        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(phoneNumber, personDTO.phoneNumber) && /*Objects.equals(birthDay, personDTO.birthDay) &&*/ Objects.equals(address, personDTO.address) && Objects.equals(gender, personDTO.gender) && Objects.equals(enabled, personDTO.enabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, birthDay, address, gender, enabled);
+        return Objects.hash(id, firstName, lastName, phoneNumber,/* birthDay,*/ address, gender, enabled);
     }
 }
