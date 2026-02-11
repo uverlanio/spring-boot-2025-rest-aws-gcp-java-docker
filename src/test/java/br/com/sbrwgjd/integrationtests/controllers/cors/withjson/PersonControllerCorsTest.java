@@ -1,4 +1,4 @@
-package br.com.sbrwgjd.integrationtests.controllers.withjson;
+package br.com.sbrwgjd.integrationtests.controllers.cors.withjson;
 
 import br.com.sbrwgjd.config.*;
 import br.com.sbrwgjd.integrationtests.dto.*;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 "spring.datasource.password=admin"
         }
 )
-class PersonControllerTest {
+class PersonControllerCorsTest {
 
     private static RequestSpecification specification;
     private static ObjectMapper mapper;
@@ -34,13 +34,6 @@ class PersonControllerTest {
     @BeforeAll
     static void setUp() {
         mapper = new ObjectMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
-        mapper.registerModule(new JavaTimeModule());
-
-        // Para garantir que ele não tente escrever datas como timestamps numéricos:
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         person = new PersonDTO();
@@ -83,7 +76,8 @@ class PersonControllerTest {
         assertEquals("Richard", createdPerson.getFirstName());
         assertEquals("Stallman", createdPerson.getLastName());
         assertEquals("New York City - New York - USA", createdPerson.getAddress());
-        assertEquals("M", createdPerson.getGender());
+        assertEquals("Male", createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
 
     }
 
@@ -118,7 +112,7 @@ class PersonControllerTest {
     @Test
     @Order(3)
     void findById() throws JsonProcessingException {
-        person.setId(11L);
+        person.setId(9L);
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
@@ -149,10 +143,11 @@ class PersonControllerTest {
         assertNotNull(createdPerson.getGender());
 
         assertTrue(createdPerson.getId() > 0);
-        assertEquals("Richard", createdPerson.getFirstName());
-        assertEquals("Stallman", createdPerson.getLastName());
-        assertEquals("New York City - New York - USA", createdPerson.getAddress());
-        assertEquals("M", createdPerson.getGender());
+        assertEquals("Roberto", createdPerson.getFirstName());
+        assertEquals("Santos", createdPerson.getLastName());
+        assertEquals("Anta Gorda - RS", createdPerson.getAddress());
+        assertEquals("Male", createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
     }
 
     @Test
@@ -208,5 +203,6 @@ class PersonControllerTest {
         person.setLastName("Stallman");
         person.setAddress("New York City - New York - USA");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 }

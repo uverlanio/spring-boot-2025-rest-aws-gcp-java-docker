@@ -36,7 +36,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     @JsonSerialize(using = GenderSerializer.class)
     private String gender;
 
-    private String sensitiveData;
+    private Boolean enabled;
 
     public Long getId() {
         return id;
@@ -60,6 +60,14 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Date getBirthDay() {
@@ -86,24 +94,24 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.gender = gender;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDTO personDTO = (PersonDTO) o;
-        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(phoneNumber, personDTO.phoneNumber) && Objects.equals(birthDay, personDTO.birthDay) && Objects.equals(address, personDTO.address) && Objects.equals(gender, personDTO.gender) && Objects.equals(sensitiveData, personDTO.sensitiveData);
+        if (!super.equals(o)) return false;
+        PersonDTO dto = (PersonDTO) o;
+        return Objects.equals(id, dto.id) && Objects.equals(firstName, dto.firstName) && Objects.equals(lastName, dto.lastName) && Objects.equals(phoneNumber, dto.phoneNumber) && Objects.equals(birthDay, dto.birthDay) && Objects.equals(address, dto.address) && Objects.equals(gender, dto.gender) && Objects.equals(enabled, dto.enabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, birthDay, address, gender, sensitiveData);
+        return Objects.hash(super.hashCode(), id, firstName, lastName, phoneNumber, birthDay, address, gender, enabled);
     }
 }

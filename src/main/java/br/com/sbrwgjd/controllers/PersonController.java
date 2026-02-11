@@ -23,19 +23,19 @@ public class PersonController implements PersonControllerDocs {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
-    public List<PersonDTO> findAll(){
+    public List<PersonDTO> findAll() {
 
         return personServices.findByAll();
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
-    public PersonDTO findById(@PathVariable("id") Long id){
+    public PersonDTO findById(@PathVariable("id") Long id) {
 
         var person = personServices.findById(id);
 
-        person.setBirthDay(new Date());
-        person.setPhoneNumber("+55 (34) 98765-4321");
+        //person.setBirthDay(new Date());
+        //person.setPhoneNumber("+55 (34) 98765-4321");
 
         return person;
     }
@@ -45,7 +45,7 @@ public class PersonController implements PersonControllerDocs {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}
     )
     @Override
-    public PersonDTO create(@RequestBody PersonDTO person){
+    public PersonDTO create(@RequestBody PersonDTO person) {
         return personServices.create(person);
     }
 
@@ -54,23 +54,29 @@ public class PersonController implements PersonControllerDocs {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}
     )
     @Override
-    public PersonDTO update(@RequestBody PersonDTO person){
+    public PersonDTO update(@RequestBody PersonDTO person) {
 
         var p = personServices.findById(person.getId());
 
-        if(Objects.nonNull(p)){
+        if (Objects.nonNull(p)) {
             return personServices.update(person);
         }
         return new PersonDTO();
     }
 
+    @PatchMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @Override
+    public PersonDTO disablePerson(@PathVariable("id") Long id){
+        return personServices.disablePerson(id);
+    }
+
     @DeleteMapping("/{id}")
     @Override
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 
         var p = personServices.findById(id);
 
-        if(Objects.nonNull(p)){
+        if (Objects.nonNull(p)) {
             personServices.delete(p.getId());
         }
 
