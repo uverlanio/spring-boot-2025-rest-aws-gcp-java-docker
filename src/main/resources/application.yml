@@ -1,4 +1,7 @@
 spring:
+  flyway:
+    validate-on-migrate: true
+    baseline-version: "1"
   application:
     name: spring-boot-2025-rest-aws-gcp-java-docker
   datasource:

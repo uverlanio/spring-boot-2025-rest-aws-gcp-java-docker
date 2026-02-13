@@ -1,15 +1,16 @@
 package br.com.sbrwgjd.integrationtests.controllers.withyaml;
 
 import br.com.sbrwgjd.config.TestConfigs;
-import br.com.sbrwgjd.integrationtests.controllers.withyaml.mapper.*;
+import br.com.sbrwgjd.integrationtests.controllers.withyaml.mapper.YAMLMapper;
 import br.com.sbrwgjd.integrationtests.dto.PersonDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.config.*;
+import io.restassured.config.EncoderConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.http.*;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -19,7 +20,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;

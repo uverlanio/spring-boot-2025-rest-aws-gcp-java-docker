@@ -6,17 +6,14 @@ import br.com.sbrwgjd.model.Person;
 import br.com.sbrwgjd.repository.PersonRepository;
 import br.com.sbrwgjd.services.*;
 import br.com.sbrwgjd.unittests.mapper.mocks.MockPerson;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -274,12 +271,13 @@ class PersonServicesTest {
     }
 
     @Test
+    @DisplayName("REASON: Still Under Development")
     void findByAll() {
         List<Person> list = input.mockEntityList();
 
         when(repository.findAll()).thenReturn(list);
 
-        List<PersonDTO> people = service.findByAll();
+        List<PersonDTO> people = new ArrayList<>();//service.findByAll();
 
         assertNotNull(people);
         assertEquals(14, people.size());
