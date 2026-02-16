@@ -8,6 +8,11 @@ import br.com.sbrwgjd.model.*;
 import br.com.sbrwgjd.repository.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.*;
+import org.springframework.hateoas.*;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -21,15 +26,30 @@ public class BookServices {
 
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    PagedResourcesAssembler<BooksDTO> assembler;
 
-    public List<BooksDTO> findByAll(){
+    public PagedModel<EntityModel<BooksDTO>> findByAll(Pageable pageable){
 
         logger.info("Finding all People!");
 
-        var books = ObjectMapper.parseListObjects(bookRepository.findAll(), BooksDTO.class);
-        books.forEach(this::addHateoasLinks);
+        var books = bookRepository.findAll(pageable);
 
-        return books;
+        var booksWithLinks = books.map(book -> {
+            var dto = ObjectMapper.parseObject(book, BooksDTO.class);
+            addHateoasLinks(dto);
+            return dto;
+        });
+
+        Link findAllLink = linkTo(
+                methodOn(BookController.class)
+                        .findAll(
+                                pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                String.valueOf(pageable.getSort())
+                        )).withSelfRel();
+
+        return assembler.toModel(booksWithLinks, findAllLink);
     }
 
     public BooksDTO findById(Long id){
@@ -89,7 +109,7 @@ public class BookServices {
 
     private void addHateoasLinks(BooksDTO dto) {
         dto.add(linkTo(methodOn(BookController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(BookController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(BookController.class).findAll(1,12, "asc")).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(BookController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(BookController.class).update(dto)).withRel("update").withType("PUT"));
         dto.add(linkTo(methodOn(BookController.class).delete(dto.getId())).withRel("findAll").withType("DELETE"));

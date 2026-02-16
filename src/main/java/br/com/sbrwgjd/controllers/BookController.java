@@ -5,10 +5,14 @@ import br.com.sbrwgjd.data.dto.*;
 import br.com.sbrwgjd.services.*;
 import io.swagger.v3.oas.annotations.tags.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Objects;
 
 @RestController
 @Tag(name = "Book", description = "Endpoints for Managing Books")
@@ -19,10 +23,15 @@ public class BookController implements BookControllerDocs {
     private BookServices bookServices;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
-   // @Override
-    public List<BooksDTO> findAll(){
-
-        return bookServices.findByAll();
+   @Override
+    public ResponseEntity<PagedModel<EntityModel<BooksDTO>>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction
+    ){
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok(bookServices.findByAll(pageable));
     }
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})

@@ -13,6 +13,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.data.domain.*;
+import org.springframework.data.web.*;
+import org.springframework.hateoas.*;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +33,10 @@ public class PersonServices {
 
     @Autowired
     PersonRepository personRepository;
+    @Autowired
+    PagedResourcesAssembler<PersonDTO> assembler;
 
-    public Page<PersonDTO> findByAll(Pageable pageable){
+    public PagedModel<EntityModel<PersonDTO>> findByAll(Pageable pageable){
 
         logger.info("Finding all People!");
 
@@ -42,7 +48,15 @@ public class PersonServices {
             return dto;
         });
 
-        return peopleWithLinks;
+        Link findAllLink = WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(PersonController.class)
+                        .findAll(
+                                pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                String.valueOf(pageable.getSort())
+                        )).withSelfRel();
+
+        return assembler.toModel(peopleWithLinks, findAllLink);
     }
 
     public PersonDTO findById(Long id){
@@ -122,7 +136,7 @@ public class PersonServices {
 
     private void addHateoasLinks(PersonDTO dto) {
         dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).findAll(1,12)).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findAll(1,12, "asc")).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("update").withType("PUT"));
         dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("disable").withType("PATCH"));

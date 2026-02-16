@@ -1,11 +1,13 @@
 package br.com.sbrwgjd.data.dto;
 
 import org.springframework.hateoas.*;
+import org.springframework.hateoas.server.core.*;
 
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+@Relation(collectionRelation = "books")
 public class BooksDTO extends RepresentationModel<BooksDTO> implements Serializable {
 
     @Serial
