@@ -7,21 +7,18 @@ import br.com.sbrwgjd.exception.ResourceNotFoundException;
 import br.com.sbrwgjd.mapper.ObjectMapper;
 import br.com.sbrwgjd.model.Person;
 import br.com.sbrwgjd.repository.PersonRepository;
-import jakarta.transaction.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.springframework.data.domain.*;
-import org.springframework.data.web.*;
-import org.springframework.hateoas.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.*;
-import org.springframework.http.*;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
-
-import java.beans.*;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +38,29 @@ public class PersonServices {
         logger.info("Finding all People!");
 
         var people = personRepository.findAll(pageable);
+
+        var peopleWithLinks = people.map(person -> {
+            var dto = ObjectMapper.parseObject(person, PersonDTO.class);
+            addHateoasLinks(dto);
+            return dto;
+        });
+
+        Link findAllLink = linkTo(
+                methodOn(PersonController.class)
+                        .findAll(
+                                pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                String.valueOf(pageable.getSort())
+                        )).withSelfRel();
+
+        return assembler.toModel(peopleWithLinks, findAllLink);
+    }
+
+    public PagedModel<EntityModel<PersonDTO>> findByName(String firstName, Pageable pageable){
+
+        logger.info("Finding People by name!");
+
+        var people = personRepository.findPeopleByName(firstName, pageable);
 
         var peopleWithLinks = people.map(person -> {
             var dto = ObjectMapper.parseObject(person, PersonDTO.class);
