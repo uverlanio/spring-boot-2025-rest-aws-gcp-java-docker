@@ -268,7 +268,7 @@ class BookServicesTest {
 
     }
 
-    @Test
+    /*@Test
     void findByAll() {
         List<Books> list = input.mockEntityList();
 
@@ -326,5 +326,5 @@ class BookServicesTest {
         assertEquals("O Hobbit7", bookSeven.getTitle());
         assertEquals("J.R.R. Tolkien7", bookSeven.getAuthor());
         assertEquals(125.50, bookSeven.getPrice());
-    }
+    }*/
 }

@@ -2,8 +2,8 @@ package br.com.sbrwgjd.integrationtests.controllers.withxml;
 
 import br.com.sbrwgjd.config.*;
 import br.com.sbrwgjd.integrationtests.dto.*;
+import br.com.sbrwgjd.integrationtests.dto.wrappers.xmlandyaml.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.xml.*;
 import io.restassured.builder.*;
@@ -175,6 +175,7 @@ class PersonControllerXmlTest {
 
         var content = given(specification)
                 .accept(MediaType.APPLICATION_XML_VALUE)
+                .queryParams("page", 0, "size", 10, "direction", "asc")
                 .when()
                 .get()
                 .then()
@@ -184,15 +185,17 @@ class PersonControllerXmlTest {
                 .body()
                 .asString();
 
-        List<PersonDTO> persons = mapper.readValue(content, new TypeReference<>() {});
+        PagedModelPerson wrapper = mapper.readValue(content, PagedModelPerson.class);
+        List<PersonDTO> people = wrapper.getContent();
+        person = people.get(8);
 
-        assertNotNull(persons.get(9).getId());
-        assertTrue(persons.get(9).getId() > 0);
-        assertEquals("Linus", persons.get(9).getFirstName());
-        assertEquals("Benedict Torvalds", persons.get(9).getLastName());
-        assertEquals("Helsinki - Finland", persons.get(9).getAddress());
-        assertEquals("Male", persons.get(9).getGender());
-        assertFalse(persons.get(9).getEnabled());
+        assertNotNull(person.getId());
+        assertTrue(person.getId() > 0);
+        assertEquals("Agnes", person.getFirstName());
+        assertEquals("Coaker", person.getLastName());
+        assertEquals("PO Box 23853", person.getAddress());
+        assertEquals("Female", person.getGender());
+        assertFalse(person.getEnabled());
     }
 
     @Test

@@ -3,6 +3,7 @@ package br.com.sbrwgjd.integrationtests.controllers.withyaml;
 import br.com.sbrwgjd.config.TestConfigs;
 import br.com.sbrwgjd.integrationtests.controllers.withyaml.mapper.YAMLMapper;
 import br.com.sbrwgjd.integrationtests.dto.PersonDTO;
+import br.com.sbrwgjd.integrationtests.dto.wrappers.xmlandyaml.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.RestAssured.*;
@@ -214,6 +214,7 @@ class PersonControllerYamlTest {
                 .spec(specification)
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .accept(MediaType.APPLICATION_YAML_VALUE)
+                .queryParams("page", 0, "size", 10, "direction", "asc")
                 .when()
                 .get()
                 .then()
@@ -221,16 +222,17 @@ class PersonControllerYamlTest {
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
-                .as(PersonDTO[].class, mapper);
+                .as(PagedModelPerson.class, mapper);
 
-        List<PersonDTO> persons = Arrays.asList(content);
+        List<PersonDTO> persons = content.getContent();
+        person = persons.get(8);
 
-        assertNotNull(persons.get(9).getId());
-        assertTrue(persons.get(9).getId() > 0);
-        assertEquals("Linus", persons.get(9).getFirstName());
-        assertEquals("Benedict Torvalds", persons.get(9).getLastName());
-        assertEquals("Helsinki - Finland", persons.get(9).getAddress());
-        assertEquals("Male", persons.get(9).getGender());
+        assertNotNull(person.getId());
+        assertTrue(person.getId() > 0);
+        assertEquals("Albert", person.getFirstName());
+        assertEquals("Klass", person.getLastName());
+        assertEquals("PO Box 20248", person.getAddress());
+        assertEquals("Male", person.getGender());
         assertFalse(persons.get(9).getEnabled());
     }
 

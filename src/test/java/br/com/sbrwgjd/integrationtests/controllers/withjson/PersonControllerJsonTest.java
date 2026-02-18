@@ -2,6 +2,7 @@ package br.com.sbrwgjd.integrationtests.controllers.withjson;
 
 import br.com.sbrwgjd.config.*;
 import br.com.sbrwgjd.integrationtests.dto.*;
+import br.com.sbrwgjd.integrationtests.dto.wrappers.json.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
@@ -173,6 +174,7 @@ class PersonControllerJsonTest {
 
         var content = given(specification)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .queryParams("page", 0, "size", 10, "direction", "asc")
                 .when()
                 .get()
                 .then()
@@ -182,15 +184,17 @@ class PersonControllerJsonTest {
                 .body()
                 .asString();
 
-        List<PersonDTO> persons = mapper.readValue(content, new TypeReference<>() {});
+        WrapperPersonDTO wrapper = mapper.readValue(content, WrapperPersonDTO.class);
+        List<PersonDTO> people = wrapper.getEmbeddedDTO().getPeople();
+        person = people.get(9);
 
-        assertNotNull(persons.get(9).getId());
-        assertTrue(persons.get(9).getId() > 0);
-        assertEquals("Linus", persons.get(9).getFirstName());
-        assertEquals("Benedict Torvalds", persons.get(9).getLastName());
-        assertEquals("Helsinki - Finland", persons.get(9).getAddress());
-        assertEquals("Male", persons.get(9).getGender());
-        assertFalse(persons.get(9).getEnabled());
+        assertNotNull(person.getId());
+        assertTrue(person.getId() > 0);
+        assertEquals("Aguie", person.getFirstName());
+        assertEquals("Tremoulet", person.getLastName());
+        assertEquals("Room 1924", person.getAddress());
+        assertEquals("Male", person.getGender());
+        assertFalse(person.getEnabled());
     }
 
     @Test
