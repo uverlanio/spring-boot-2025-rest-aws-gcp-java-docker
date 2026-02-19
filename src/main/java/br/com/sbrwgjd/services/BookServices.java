@@ -31,7 +31,7 @@ public class BookServices {
 
     public PagedModel<EntityModel<BooksDTO>> findByAll(Pageable pageable){
 
-        logger.info("Finding all People!");
+        logger.info("Finding all Books!");
 
         var books = bookRepository.findAll(pageable);
 
