@@ -1,23 +1,24 @@
 package br.com.sbrwgjd.services;
 
-import br.com.sbrwgjd.controllers.*;
-import br.com.sbrwgjd.data.dto.*;
-import br.com.sbrwgjd.exception.*;
-import br.com.sbrwgjd.mapper.*;
-import br.com.sbrwgjd.model.*;
-import br.com.sbrwgjd.repository.*;
-import org.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.domain.*;
-import org.springframework.data.web.*;
-import org.springframework.hateoas.*;
+import br.com.sbrwgjd.controllers.BookController;
+import br.com.sbrwgjd.data.dto.BooksDTO;
+import br.com.sbrwgjd.exception.RequiredObjectIsNullException;
+import br.com.sbrwgjd.exception.ResourceNotFoundException;
+import br.com.sbrwgjd.mapper.ObjectMapper;
+import br.com.sbrwgjd.model.Books;
+import br.com.sbrwgjd.repository.BookRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.*;
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class BookServices {
