@@ -1,32 +1,24 @@
-package br.com.sbrwgjd.integrationtests.controllers.withjson;
+package br.com.sbrwgjd.integrationtests.controllers.withyaml;
 
-import br.com.sbrwgjd.config.TestConfigs;
-import br.com.sbrwgjd.integrationtests.dto.BooksDTO;
-import br.com.sbrwgjd.integrationtests.dto.wrappers.json.WrapperBookDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.LogDetail;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import br.com.sbrwgjd.config.*;
+import br.com.sbrwgjd.integrationtests.controllers.withyaml.mapper.*;
+import br.com.sbrwgjd.integrationtests.dto.*;
+import br.com.sbrwgjd.integrationtests.dto.wrappers.xmlandyaml.*;
+import com.fasterxml.jackson.core.*;
+import io.restassured.builder.*;
+import io.restassured.config.*;
+import io.restassured.filter.log.*;
+import io.restassured.http.*;
+import io.restassured.specification.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.*;
+import org.springframework.http.*;
 
 import java.sql.*;
-import java.time.*;
-import java.util.List;
+import java.util.*;
 
-import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static io.restassured.RestAssured.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
@@ -38,16 +30,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         }
 )
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class BookControllerJsonTest {
+class BookControllerYamlTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper mapper;
+    private static YAMLMapper mapper;
     private static BooksDTO book;
 
     @BeforeAll
     static void setUp() {
-        mapper = new ObjectMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper = new YAMLMapper();
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
@@ -66,26 +57,34 @@ class BookControllerJsonTest {
 
         mockBook();
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .body(book)
+        var createdBook = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+                    .body(book, mapper)
                 .when()
                     .post()
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
-                        .asString();
-
-        BooksDTO createdBook = mapper.readValue(content, BooksDTO.class);
-        book = createdBook; // para a informação ser reutilizada no próximo teste
+                        .as(BooksDTO.class, mapper);
+        
+        book = createdBook;
 
         assertNotNull(createdBook.getId());
         assertTrue(createdBook.getId() > 0);
         assertEquals("Crônicas de um Futuro Esquecido", createdBook.getTitle());
         assertEquals("Alana V. Kepler", createdBook.getAuthor());
         assertEquals(59.90, createdBook.getPrice());
+
     }
 
     @Test
@@ -94,19 +93,26 @@ class BookControllerJsonTest {
 
         book.setTitle("O Último Guardião do Orvalho");
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .body(book)
+        var createdBook = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+                    .body(book, mapper)
                 .when()
                     .put()
                 .then()
                     .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
-                        .asString();
+                        .as(BooksDTO.class, mapper);
 
-        BooksDTO createdBook = mapper.readValue(content, BooksDTO.class);
         book = createdBook;
 
         assertNotNull(createdBook.getId());
@@ -120,19 +126,25 @@ class BookControllerJsonTest {
     @Order(3)
     void findByIdTest() throws JsonProcessingException {
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        var createdBook = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParams("id", book.getId())
                 .when()
                     .get("{id}")
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
-                        .asString();
+                        .as(BooksDTO.class, mapper);
 
-        BooksDTO createdBook = mapper.readValue(content, BooksDTO.class);
         book = createdBook;
 
         assertNotNull(createdBook.getId());
@@ -146,20 +158,27 @@ class BookControllerJsonTest {
     @Order(4)
     void findAllTest() throws JsonProcessingException {
 
-        var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        var content = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .queryParams("page", 0, "size", 10, "direction", "asc")
                 .when()
                 .get()
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
-                .asString();
+                .as(PagedModelBook.class, mapper);
 
-        WrapperBookDTO wrapper = mapper.readValue(content, WrapperBookDTO.class);
-        List<BooksDTO> books = wrapper.getEmbeddedDTO().getBooks();
+        List<BooksDTO> books = content.getContent();
         book = books.get(9);
 
         assertNotNull(book.getId());
