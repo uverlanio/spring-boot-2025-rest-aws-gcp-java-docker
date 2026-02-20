@@ -15,6 +15,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -44,6 +45,29 @@ public class BookServices {
 
         Link findAllLink = linkTo(
                 methodOn(BookController.class)
+                        .findAll(
+                                pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                String.valueOf(pageable.getSort())
+                        )).withSelfRel();
+
+        return assembler.toModel(booksWithLinks, findAllLink);
+    }
+
+    public PagedModel<EntityModel<BooksDTO>> findByTitle(String title, Pageable pageable){
+
+        logger.info("Finding Books by title!");
+
+        var books = bookRepository.findBookByTitle(title, pageable);
+
+        var booksWithLinks = books.map(book -> {
+            var dto = ObjectMapper.parseObject(book, BooksDTO.class);
+            addHateoasLinks(dto);
+            return dto;
+        });
+
+        Link findAllLink = WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(BookController.class)
                         .findAll(
                                 pageable.getPageNumber(),
                                 pageable.getPageSize(),

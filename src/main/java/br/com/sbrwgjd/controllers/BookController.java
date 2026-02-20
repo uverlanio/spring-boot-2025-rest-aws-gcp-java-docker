@@ -34,6 +34,19 @@ public class BookController implements BookControllerDocs {
         return ResponseEntity.ok(bookServices.findByAll(pageable));
     }
 
+    @GetMapping(value = "/findBookByTitle/{title}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    @Override
+    public ResponseEntity<PagedModel<EntityModel<BooksDTO>>> findByTitle(
+            @PathVariable("title") String title,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction
+    ){
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok(bookServices.findByTitle(title, pageable));
+    }
+
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
    // @Override
     public BooksDTO findById(@PathVariable("id") Long id){
