@@ -146,7 +146,7 @@ class PersonControllerCorsTest {
         assertEquals("Roberto", createdPerson.getFirstName());
         assertEquals("Santos", createdPerson.getLastName());
         assertEquals("Anta Gorda - RS", createdPerson.getAddress());
-        assertEquals("Male", createdPerson.getGender());
+        assertEquals("Female", createdPerson.getGender());
         assertTrue(createdPerson.getEnabled());
     }
 

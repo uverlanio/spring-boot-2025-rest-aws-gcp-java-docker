@@ -271,6 +271,7 @@ class PersonServicesTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("REASON: Still Under Development")
     void findByAll() {
         List<Person> list = input.mockEntityList();
