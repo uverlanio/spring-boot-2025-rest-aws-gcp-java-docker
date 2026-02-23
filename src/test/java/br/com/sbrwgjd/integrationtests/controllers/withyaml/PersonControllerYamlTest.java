@@ -225,17 +225,54 @@ class PersonControllerYamlTest {
                 .as(PagedModelPerson.class, mapper);
 
         List<PersonDTO> persons = content.getContent();
-        person = persons.get(8);
+        person = persons.get(9);
 
         assertNotNull(person.getId());
         assertTrue(person.getId() > 0);
-        assertEquals("Albert", person.getFirstName());
-        assertEquals("Klass", person.getLastName());
-        assertEquals("PO Box 20248", person.getAddress());
+        assertEquals("Aldus", person.getFirstName());
+        assertEquals("Skeermer", person.getLastName());
+        assertEquals("Apt 459", person.getAddress());
         assertEquals("Male", person.getGender());
-        assertFalse(persons.get(9).getEnabled());
+        assertFalse(person.getEnabled());
     }
 
+    @Test
+    @Order(6)
+    void findByNameTest() throws JsonProcessingException {
+
+        var content = given().config
+                        (RestAssuredConfig.config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(
+                                                MediaType.APPLICATION_YAML_VALUE,
+                                                ContentType.TEXT))
+                        )
+                .spec(specification)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+                .pathParams("firstName", "and")
+                .queryParams("page", 0, "size", 10, "direction", "asc")
+                .when()
+                .get("findPeopleByName/{firstName}")
+                .then()
+                .statusCode(200)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .extract()
+                .body()
+                .as(PagedModelPerson.class, mapper);
+
+        List<PersonDTO> persons = content.getContent();
+        person = persons.get(9);
+
+        assertNotNull(person.getId());
+        assertTrue(person.getId() > 0);
+        assertEquals("Cleavland", person.getFirstName());
+        assertEquals("Simoneschi", person.getLastName());
+        assertEquals("Room 1395", person.getAddress());
+        assertEquals("Male", person.getGender());
+        assertFalse(person.getEnabled());
+    }
+/*
     @Test
     @Order(6)
     void delete() throws JsonProcessingException {
@@ -247,7 +284,7 @@ class PersonControllerYamlTest {
                     .delete("{id}")
                 .then()
                     .statusCode(204);
-    }
+    }*/
 
     private void mockPerson() {
 

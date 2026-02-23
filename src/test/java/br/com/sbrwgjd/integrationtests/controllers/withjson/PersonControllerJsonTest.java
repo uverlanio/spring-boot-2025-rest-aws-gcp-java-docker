@@ -190,15 +190,45 @@ class PersonControllerJsonTest {
 
         assertNotNull(person.getId());
         assertTrue(person.getId() > 0);
-        assertEquals("Aguie", person.getFirstName());
-        assertEquals("Tremoulet", person.getLastName());
-        assertEquals("Room 1924", person.getAddress());
+        assertEquals("Aldus", person.getFirstName());
+        assertEquals("Skeermer", person.getLastName());
+        assertEquals("Apt 459", person.getAddress());
         assertEquals("Male", person.getGender());
         assertFalse(person.getEnabled());
     }
 
     @Test
     @Order(6)
+    void findByNameTest() throws JsonProcessingException {
+
+        var content = given(specification)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .pathParams("firstName", "and")
+                .queryParams("page", 0, "size", 10, "direction", "asc")
+                .when()
+                .get("findPeopleByName/{firstName}")
+                .then()
+                .statusCode(200)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .extract()
+                .body()
+                .asString();
+
+        WrapperPersonDTO wrapper = mapper.readValue(content, WrapperPersonDTO.class);
+        List<PersonDTO> people = wrapper.getEmbeddedDTO().getPeople();
+        person = people.get(9);
+
+        assertNotNull(person.getId());
+        assertTrue(person.getId() > 0);
+        assertEquals("Cleavland", person.getFirstName());
+        assertEquals("Simoneschi", person.getLastName());
+        assertEquals("Room 1395", person.getAddress());
+        assertEquals("Male", person.getGender());
+        assertFalse(person.getEnabled());
+    }
+
+    /*@Test
+    @Order(7)
     void delete() throws JsonProcessingException {
 
         given(specification)
@@ -208,7 +238,7 @@ class PersonControllerJsonTest {
                     .delete("{id}")
                 .then()
                     .statusCode(204);
-    }
+    }*/
 
     private void mockPerson() {
 

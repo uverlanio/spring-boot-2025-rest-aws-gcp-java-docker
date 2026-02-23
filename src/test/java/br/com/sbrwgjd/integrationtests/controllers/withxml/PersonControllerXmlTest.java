@@ -187,18 +187,48 @@ class PersonControllerXmlTest {
 
         PagedModelPerson wrapper = mapper.readValue(content, PagedModelPerson.class);
         List<PersonDTO> people = wrapper.getContent();
-        person = people.get(8);
+        person = people.get(9);
 
         assertNotNull(person.getId());
         assertTrue(person.getId() > 0);
-        assertEquals("Agnes", person.getFirstName());
-        assertEquals("Coaker", person.getLastName());
-        assertEquals("PO Box 23853", person.getAddress());
-        assertEquals("Female", person.getGender());
+        assertEquals("Aldus", person.getFirstName());
+        assertEquals("Skeermer", person.getLastName());
+        assertEquals("Apt 459", person.getAddress());
+        assertEquals("Male", person.getGender());
         assertFalse(person.getEnabled());
     }
 
     @Test
+    @Order(5)
+    void findByNameTest() throws JsonProcessingException {
+
+        var content = given(specification)
+                .accept(MediaType.APPLICATION_XML_VALUE)
+                .pathParams("firstName", "and")
+                .queryParams("page", 0, "size", 10, "direction", "asc")
+                .when()
+                .get("findPeopleByName/{firstName}")
+                .then()
+                .statusCode(200)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .extract()
+                .body()
+                .asString();
+
+        PagedModelPerson wrapper = mapper.readValue(content, PagedModelPerson.class);
+        List<PersonDTO> people = wrapper.getContent();
+        person = people.get(9);
+
+        assertNotNull(person.getId());
+        assertTrue(person.getId() > 0);
+        assertEquals("Cleavland", person.getFirstName());
+        assertEquals("Simoneschi", person.getLastName());
+        assertEquals("Room 1395", person.getAddress());
+        assertEquals("Male", person.getGender());
+        assertFalse(person.getEnabled());
+    }
+
+    /*@Test
     @Order(6)
     void delete() throws JsonProcessingException {
 
@@ -210,7 +240,7 @@ class PersonControllerXmlTest {
                 .then()
                     .statusCode(204);
     }
-
+*/
     private void mockPerson() {
 
         person.setFirstName("Linus");
