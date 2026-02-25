@@ -1,30 +1,41 @@
 package br.com.sbrwgjd.controllers;
 
-import br.com.sbrwgjd.controllers.docs.*;
-import br.com.sbrwgjd.data.dto.*;
-import br.com.sbrwgjd.services.*;
-import jakarta.servlet.http.*;
-import org.slf4j.*;
+import br.com.sbrwgjd.controllers.docs.FileControllerDocs;
+import br.com.sbrwgjd.data.dto.UploadFileResponseDTO;
+import br.com.sbrwgjd.services.FileStorageService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.*;
-import org.springframework.web.servlet.support.*;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/file/v1")
 public class FileController implements FileControllerDocs {
 
-    private final Logger log = LoggerFactory.getLogger(FileController.class);
+    private final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private FileStorageService service;
 
-    @Override
     @PostMapping("/uploadFile")
+    @Override
     public UploadFileResponseDTO uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         var fileName = service.storeFile(file);
         var fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -39,8 +50,41 @@ public class FileController implements FileControllerDocs {
         return List.of();
     }
 
+    @PostMapping("/uploadMultipleFiles")
     @Override
-    public ResponseEntity<ResponseEntity> downloadFile(String fileName, HttpServletRequest request) {
-        return null;
+    public List<UploadFileResponseDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+        return Arrays.asList(files)
+                .stream()
+                .map(file -> {
+                    try {
+                        return uploadFile(file);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/downloadFile/{fileName:.+}")
+    @Override
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = (Resource) service.loadFileAsResource(fileName);
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (Exception e) {
+            logger.error("Could not determine file type!");
+        }
+
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }
