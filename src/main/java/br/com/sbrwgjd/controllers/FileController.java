@@ -45,11 +45,6 @@ public class FileController implements FileControllerDocs {
         return new UploadFileResponseDTO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
-    @Override
-    public List<UploadFileResponseDTO> uploadFiles(MultipartFile[] files) throws IOException {
-        return List.of();
-    }
-
     @PostMapping("/uploadMultipleFiles")
     @Override
     public List<UploadFileResponseDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {

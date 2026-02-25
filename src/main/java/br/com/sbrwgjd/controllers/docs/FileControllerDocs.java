@@ -14,8 +14,7 @@ import java.util.*;
 @Tag(name = "File Endpoint")
 public interface FileControllerDocs {
 
-    UploadFileResponseDTO uploadFile(MultipartFile file) throws IOException;
-    List<UploadFileResponseDTO> uploadFiles(MultipartFile[] files) throws IOException;
+    UploadFileResponseDTO uploadFile(@RequestParam("file") MultipartFile file) throws IOException;
 
     @PostMapping("/uploadMultipleFiles")
     List<UploadFileResponseDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files);
