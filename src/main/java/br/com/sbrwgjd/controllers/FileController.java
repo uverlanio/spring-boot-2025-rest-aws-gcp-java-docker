@@ -6,7 +6,7 @@ import br.com.sbrwgjd.services.FileStorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -63,7 +63,7 @@ public class FileController implements FileControllerDocs {
     @GetMapping("/downloadFile/{fileName:.+}")
     @Override
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        Resource resource = (Resource) service.loadFileAsResource(fileName);
+        Resource resource = service.loadFileAsResource(fileName);
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
