@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -39,21 +39,7 @@ public class PersonServices {
 
         var people = personRepository.findAll(pageable);
 
-        var peopleWithLinks = people.map(person -> {
-            var dto = ObjectMapper.parseObject(person, PersonDTO.class);
-            addHateoasLinks(dto);
-            return dto;
-        });
-
-        Link findAllLink = linkTo(
-                methodOn(PersonController.class)
-                        .findAll(
-                                pageable.getPageNumber(),
-                                pageable.getPageSize(),
-                                String.valueOf(pageable.getSort())
-                        )).withSelfRel();
-
-        return assembler.toModel(peopleWithLinks, findAllLink);
+        return buildPagedModel(pageable, people);
     }
 
     public PagedModel<EntityModel<PersonDTO>> findByName(String firstName, Pageable pageable){
@@ -62,21 +48,7 @@ public class PersonServices {
 
         var people = personRepository.findPeopleByName(firstName, pageable);
 
-        var peopleWithLinks = people.map(person -> {
-            var dto = ObjectMapper.parseObject(person, PersonDTO.class);
-            addHateoasLinks(dto);
-            return dto;
-        });
-
-        Link findAllLink = WebMvcLinkBuilder.linkTo(
-                WebMvcLinkBuilder.methodOn(PersonController.class)
-                        .findAll(
-                                pageable.getPageNumber(),
-                                pageable.getPageSize(),
-                                String.valueOf(pageable.getSort())
-                        )).withSelfRel();
-
-        return assembler.toModel(peopleWithLinks, findAllLink);
+        return buildPagedModel(pageable, people);
     }
 
     public PersonDTO findById(Long id){
@@ -154,9 +126,28 @@ public class PersonServices {
         return dto;
     }
 
+    private PagedModel<EntityModel<PersonDTO>> buildPagedModel(Pageable pageable, Page<Person> people) {
+        var peopleWithLinks = people.map(person -> {
+            var dto = ObjectMapper.parseObject(person, PersonDTO.class);
+            addHateoasLinks(dto);
+            return dto;
+        });
+
+        Link findAllLink = linkTo(
+                methodOn(PersonController.class)
+                        .findAll(
+                                pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                String.valueOf(pageable.getSort())
+                        )).withSelfRel();
+
+        return assembler.toModel(peopleWithLinks, findAllLink);
+    }
+
     private void addHateoasLinks(PersonDTO dto) {
         dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).findAll(1,12, "asc")).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findByName("",1, 12, "asc")).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("update").withType("PUT"));
         dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("disable").withType("PATCH"));
