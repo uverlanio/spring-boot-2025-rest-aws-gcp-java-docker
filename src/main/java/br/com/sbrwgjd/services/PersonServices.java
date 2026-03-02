@@ -2,26 +2,36 @@ package br.com.sbrwgjd.services;
 
 import br.com.sbrwgjd.controllers.PersonController;
 import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.exception.BadRequestException;
+import br.com.sbrwgjd.exception.FileStorageException;
 import br.com.sbrwgjd.exception.RequiredObjectIsNullException;
 import br.com.sbrwgjd.exception.ResourceNotFoundException;
-import br.com.sbrwgjd.mapper.ObjectMapper;
+import br.com.sbrwgjd.file.importer.contract.FileImporter;
+import br.com.sbrwgjd.file.importer.factory.FileImporterFactory;
 import br.com.sbrwgjd.model.Person;
 import br.com.sbrwgjd.repository.PersonRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static br.com.sbrwgjd.mapper.ObjectMapper.parseObject;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonServices {
@@ -32,6 +42,8 @@ public class PersonServices {
     PersonRepository personRepository;
     @Autowired
     PagedResourcesAssembler<PersonDTO> assembler;
+    @Autowired
+    FileImporterFactory importer;
 
     public PagedModel<EntityModel<PersonDTO>> findByAll(Pageable pageable){
 
@@ -58,7 +70,7 @@ public class PersonServices {
         var entity = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
-        var dto = ObjectMapper.parseObject(entity, PersonDTO.class);
+        var dto = parseObject(entity, PersonDTO.class);
         addHateoasLinks(dto);
         return dto;
     }
@@ -69,11 +81,39 @@ public class PersonServices {
 
         logger.info("Creating one Person!");
 
-        var entity = ObjectMapper.parseObject(personDTO, Person.class);
+        var entity = parseObject(personDTO, Person.class);
 
-        var dto = ObjectMapper.parseObject(personRepository.save(entity), PersonDTO.class);
+        var dto = parseObject(personRepository.save(entity), PersonDTO.class);
         addHateoasLinks(dto);
         return dto;
+    }
+
+    public List<PersonDTO> massCreation(MultipartFile multipartFile){
+
+        logger.info("Importing People from file!");
+
+        if (multipartFile.isEmpty()) throw new BadRequestException("Please set a valid file!");
+
+        try(InputStream inputStream = multipartFile.getInputStream()) {
+            String fileName = Optional.ofNullable(multipartFile.getOriginalFilename()).orElseThrow(
+                    () -> new BadRequestException("File name cannot be null!")
+            );
+            FileImporter importer = this.importer.getFileImporter(fileName);
+
+            List<Person> entities = importer.importFile(inputStream).stream()
+                    .map(dto -> personRepository.save(parseObject(dto, Person.class)))
+                    .toList();
+
+            return entities.stream()
+                    .map(entity -> {
+                var dto = parseObject(entity, PersonDTO.class);
+                addHateoasLinks(dto);
+                return dto;
+            }).toList();
+
+        } catch (Exception e) {
+            throw new FileStorageException("Error processing the file!");
+        }
     }
 
     public PersonDTO update(PersonDTO personDTO) {
@@ -91,7 +131,7 @@ public class PersonServices {
         entity.setAddress(personDTO.getAddress());
         entity.setGender(personDTO.getGender());
 
-        var dto = ObjectMapper.parseObject(personRepository.save(entity), PersonDTO.class);
+        var dto = parseObject(personRepository.save(entity), PersonDTO.class);
         addHateoasLinks(dto);
 
         return dto;
@@ -121,14 +161,14 @@ public class PersonServices {
 
         var entity = personRepository.findById(id).orElse(new  Person());
 
-        var dto = ObjectMapper.parseObject(entity, PersonDTO.class);
+        var dto = parseObject(entity, PersonDTO.class);
         addHateoasLinks(dto);
         return dto;
     }
 
     private PagedModel<EntityModel<PersonDTO>> buildPagedModel(Pageable pageable, Page<Person> people) {
         var peopleWithLinks = people.map(person -> {
-            var dto = ObjectMapper.parseObject(person, PersonDTO.class);
+            var dto = parseObject(person, PersonDTO.class);
             addHateoasLinks(dto);
             return dto;
         });

@@ -11,6 +11,7 @@ import org.springframework.hateoas.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.*;
 
 import java.util.List;
 
@@ -41,6 +42,25 @@ public interface PersonControllerDocs {
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     );
+
+    @Operation(summary = "Massive People creation",
+            description = "Massive People creation with upload of XLSX or CSV",
+            tags = {"People"},
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = {
+                                    @Content(schema = @Schema(implementation = PersonDTO.class))
+                            }),
+                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+            }
+    )
+    List<PersonDTO> massCreation(MultipartFile file);
 
     @Operation(summary = "Find People by FirstName",
             description = "Finds People by their First Names",

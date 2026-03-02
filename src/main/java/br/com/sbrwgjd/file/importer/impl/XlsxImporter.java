@@ -1,14 +1,19 @@
 package br.com.sbrwgjd.file.importer.impl;
 
-import br.com.sbrwgjd.data.dto.*;
-import br.com.sbrwgjd.file.importer.contract.*;
-import org.apache.commons.csv.*;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
+import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.file.importer.contract.FileImporter;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+@Component
 public class XlsxImporter implements FileImporter {
     @Override
     public List<PersonDTO> importFile(InputStream inputStream) throws Exception {
