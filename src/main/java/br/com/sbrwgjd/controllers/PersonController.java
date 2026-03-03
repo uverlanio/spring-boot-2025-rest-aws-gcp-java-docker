@@ -73,14 +73,15 @@ public class PersonController implements PersonControllerDocs {
         return person;
     }
 
-    @PostMapping(value = "massCreation",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}
-    )
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
     public PersonDTO create(@RequestBody PersonDTO person) {
         return personServices.create(person);
     }
 
+    @PostMapping(value = "/massCreation",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public List<PersonDTO> massCreation(@RequestParam("file") MultipartFile file){
         return personServices.massCreation(file);
