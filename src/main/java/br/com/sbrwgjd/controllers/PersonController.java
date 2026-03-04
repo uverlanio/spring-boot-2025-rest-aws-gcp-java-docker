@@ -2,15 +2,19 @@ package br.com.sbrwgjd.controllers;
 
 import br.com.sbrwgjd.controllers.docs.PersonControllerDocs;
 import br.com.sbrwgjd.data.dto.PersonDTO;
+import br.com.sbrwgjd.file.exporter.MediaTypes;
 import br.com.sbrwgjd.services.PersonServices;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,6 +52,35 @@ public class PersonController implements PersonControllerDocs {
         return ResponseEntity.ok(personServices.findByAll(pageable));
     }
 
+    @GetMapping(value = "exportPage", produces = {
+            MediaTypes.APPLICATION_XLSX_VALUE, MediaTypes.APPLICATION_CSV_VALUE})
+    @Override
+    public ResponseEntity<Resource> exportPage(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            HttpServletRequest request
+    ){
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+
+        String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+
+        Resource file = personServices.exportPage(pageable, acceptHeader);
+
+        var contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
+        var fileExtension = MediaTypes.APPLICATION_XLSX_VALUE.equals(acceptHeader) ? ".xlsx" : ".csv";
+        var fileName = "people_exported_" + fileExtension;
+
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + fileName + "\"")
+                .body(file);
+    }
+
     @GetMapping(value = "/findPeopleByName/{firstName}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
     public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(
@@ -66,9 +99,6 @@ public class PersonController implements PersonControllerDocs {
     public PersonDTO findById(@PathVariable("id") Long id) {
 
         var person = personServices.findById(id);
-
-        //person.setBirthDay(new Date());
-        //person.setPhoneNumber("+55 (34) 98765-4321");
 
         return person;
     }
