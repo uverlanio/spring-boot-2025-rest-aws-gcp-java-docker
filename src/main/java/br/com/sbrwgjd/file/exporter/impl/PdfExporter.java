@@ -15,7 +15,7 @@ public class PdfExporter implements FileExporter {
     @Override
     public Resource exportFile(List<PersonDTO> people) throws Exception {
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("/templates/people.jrxml");
+        InputStream inputStream = getClass().getResourceAsStream("/templates/people.jrxml");
         if(inputStream == null) {
             throw new RuntimeException("Template file not found: /templates/people.jrxml");
         }
@@ -26,6 +26,7 @@ public class PdfExporter implements FileExporter {
         Map<String,Object> parameters = new HashMap<>();
         //parameters.put("title", "People Report");
 
+        jasperReport.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
