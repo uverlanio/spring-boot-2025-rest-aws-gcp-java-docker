@@ -29,8 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @Tag(name = "People", description = "Endpoints for Managing People")
@@ -52,8 +51,10 @@ public class PersonController implements PersonControllerDocs {
         return ResponseEntity.ok(personServices.findByAll(pageable));
     }
 
-    @GetMapping(value = "exportPage", produces = {
-            MediaTypes.APPLICATION_XLSX_VALUE, MediaTypes.APPLICATION_CSV_VALUE})
+    @GetMapping(value = "/exportPage", produces = {
+            MediaTypes.APPLICATION_XLSX_VALUE,
+            MediaTypes.APPLICATION_CSV_VALUE,
+            MediaTypes.APPLICATION_PDF_VALUE})
     @Override
     public ResponseEntity<Resource> exportPage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -68,8 +69,15 @@ public class PersonController implements PersonControllerDocs {
 
         Resource file = personServices.exportPage(pageable, acceptHeader);
 
+        Map<String, String> extensionMap = Map.of(
+                MediaTypes.APPLICATION_XLSX_VALUE, ".xlsx",
+                MediaTypes.APPLICATION_CSV_VALUE, ".csv",
+                MediaTypes.APPLICATION_PDF_VALUE, ".pfd"
+        );
+
+        var fileExtension = extensionMap.getOrDefault(acceptHeader, "");
         var contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
-        var fileExtension = MediaTypes.APPLICATION_XLSX_VALUE.equals(acceptHeader) ? ".xlsx" : ".csv";
+
         var fileName = "people_exported_" + fileExtension;
 
 
