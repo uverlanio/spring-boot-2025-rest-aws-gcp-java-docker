@@ -1,17 +1,14 @@
 package br.com.sbrwgjd.data.dto;
 
-import br.com.sbrwgjd.serializer.GenderSerializer;
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.springframework.hateoas.RepresentationModel;
+import br.com.sbrwgjd.model.*;
+import br.com.sbrwgjd.serializer.*;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
+import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.core.*;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 
 //@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender"})
 @Relation(collectionRelation = "people")
@@ -23,6 +20,13 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private Long id;
 
     private String firstName;
+
+    private String profileUrl;
+
+    private String photoUrl;
+
+    @JsonIgnore
+    private List<Books> books;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String lastName;
@@ -104,8 +108,33 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.enabled = enabled;
     }
 
+    @JsonIgnore
     public String getName() {
         return (firstName != null ? firstName : "") + (lastName != null ? lastName : "");
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public List<Books> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Books> books) {
+        this.books = books;
     }
 
     @Override
@@ -113,11 +142,11 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         PersonDTO dto = (PersonDTO) o;
-        return Objects.equals(id, dto.id) && Objects.equals(firstName, dto.firstName) && Objects.equals(lastName, dto.lastName) && Objects.equals(phoneNumber, dto.phoneNumber) && Objects.equals(birthDay, dto.birthDay) && Objects.equals(address, dto.address) && Objects.equals(gender, dto.gender) && Objects.equals(enabled, dto.enabled);
+        return Objects.equals(id, dto.id) && Objects.equals(firstName, dto.firstName) && Objects.equals(profileUrl, dto.profileUrl) && Objects.equals(photoUrl, dto.photoUrl) && Objects.equals(books, dto.books) && Objects.equals(lastName, dto.lastName) && Objects.equals(phoneNumber, dto.phoneNumber) && Objects.equals(birthDay, dto.birthDay) && Objects.equals(address, dto.address) && Objects.equals(gender, dto.gender) && Objects.equals(enabled, dto.enabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, firstName, lastName, phoneNumber, birthDay, address, gender, enabled);
+        return Objects.hash(super.hashCode(), id, firstName, profileUrl, photoUrl, books, lastName, phoneNumber, birthDay, address, gender, enabled);
     }
 }
