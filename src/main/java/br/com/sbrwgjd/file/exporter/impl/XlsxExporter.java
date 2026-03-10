@@ -45,6 +45,11 @@ public class XlsxExporter implements FileExporter {
         }
     }
 
+    @Override
+    public Resource exportPerson(PersonDTO person) throws Exception {
+        return null;
+    }
+
     private static void createRowWithPeople(PersonDTO personDTO, Row row) {
         row.createCell(0).setCellValue(personDTO.getId());
         row.createCell(1).setCellValue(personDTO.getFirstName());

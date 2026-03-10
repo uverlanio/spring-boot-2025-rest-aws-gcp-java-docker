@@ -2,13 +2,21 @@ package br.com.sbrwgjd.file.exporter.impl;
 
 import br.com.sbrwgjd.data.dto.PersonDTO;
 import br.com.sbrwgjd.file.exporter.contract.FileExporter;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.*;
-import org.springframework.core.io.*;
-import org.springframework.stereotype.*;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class PdfExporter implements FileExporter {
@@ -35,5 +43,10 @@ public class PdfExporter implements FileExporter {
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Resource exportPerson(PersonDTO person) throws Exception {
+        return null;
     }
 }
