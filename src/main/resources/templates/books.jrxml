@@ -8,7 +8,7 @@
 		</conditionalStyle>
 	</style>
 	<parameter name="PERSON_ID" class="java.lang.String"/>
-	<parameter name="SUB_REPORT_DATASOURCE" class="java.lang.String"/>
+	<parameter name="SUB_REPORT_DATA_SOURCE" class="java.lang.String"/>
 	<query language="SQL"><![CDATA[SELECT 
 id,
 author,

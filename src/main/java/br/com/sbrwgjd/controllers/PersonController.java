@@ -3,7 +3,8 @@ package br.com.sbrwgjd.controllers;
 import br.com.sbrwgjd.controllers.docs.PersonControllerDocs;
 import br.com.sbrwgjd.data.dto.PersonDTO;
 import br.com.sbrwgjd.file.exporter.MediaTypes;
-import br.com.sbrwgjd.services.PersonServices;
+import br.com.sbrwgjd.file.exporter.impl.*;
+import br.com.sbrwgjd.services.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,23 @@ public class PersonController implements PersonControllerDocs {
         var person = personServices.findById(id);
 
         return person;
+    }
+
+    @GetMapping(value = "/export/{id}",
+            produces = MediaType.APPLICATION_PDF_VALUE)
+    @Override
+    public ResponseEntity<Resource> export(@PathVariable("id") Long id, HttpServletRequest request) {
+
+        String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+
+        Resource file = personServices.exportPerson(id, acceptHeader);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(acceptHeader))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=person.pdf")
+                .body(file);
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
