@@ -41,7 +41,7 @@ public class PdfExporter implements FileExporter {
         Map<String,Object> parameters = new HashMap<>();
         //parameters.put("title", "People Report");
 
-        jasperReport.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
+        //jasperReport.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -66,31 +66,25 @@ public class PdfExporter implements FileExporter {
 
         InputStream qrCodeStream = service.generateQRCode(person.getProfileUrl(), 200, 200);
 
-        // 1. Compile os relatórios
         JasperReport mainReport = JasperCompileManager.compileReport(mainTemplateStream);
         JasperReport subReport = JasperCompileManager.compileReport(subReportStream);
 
-        // 2. Prepare o DataSource do Subreport (Lista de livros)
-        // person.getBooks() deve retornar uma Collection
-        JRBeanCollectionDataSource subDataSource = new JRBeanCollectionDataSource(person.getBooks());
-
-        // 3. Prepare os parâmetros
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("PERSON_ID", person.getId());
-        parameters.put("SUB_REPORT_DATA_SOURCE", subDataSource);
-        parameters.put("BOOK_SUB_REPORT", subReport); // Objeto compilado
-        parameters.put("QR_CODEIMAGE", qrCodeStream); // Se for usar como imagem
-
-        // 4. DataSource Principal
-        // Se você quer usar os dados do objeto 'person' que já está na memória:
-        JRBeanCollectionDataSource mainDataSource = new JRBeanCollectionDataSource(Collections.singletonList(person));
-
-        // 5. Preencher (Fill)
-        JasperPrint jasperPrint = JasperFillManager.fillReport(mainReport, parameters, mainDataSource);
+        JRBeanCollectionDataSource subReportDataSource = new JRBeanCollectionDataSource(person.getBooks());
 
         String path = getClass().getResource("/templates/books.jasper").getPath();
 
-        mainReport.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
+        Map<String, Object> parameters = new HashMap<>();
+        //parameters.put("PERSON_ID", person.getId());
+        parameters.put("SUB_REPORT_DATA_SOURCE", subReportDataSource);
+        parameters.put("BOOK_SUB_REPORT", subReport);
+        parameters.put("SUB_REPORT_DIR", path);
+        parameters.put("QR_CODEIMAGE", qrCodeStream);
+
+        JRBeanCollectionDataSource mainDataSource = new JRBeanCollectionDataSource(Collections.singletonList(person));
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(mainReport, parameters, mainDataSource);
+
+        //mainReport.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);

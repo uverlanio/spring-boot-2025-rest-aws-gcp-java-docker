@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.sql.*;
-import java.time.*;
 import java.util.*;
 
 @Entity
@@ -21,7 +20,7 @@ public class Books implements Serializable {
     private String author;
 
     @Column(name = "launch_date")
-    private Timestamp launch_date;
+    private Timestamp launchDate;
 
     @Column(nullable = false)
     private double price;
@@ -45,12 +44,12 @@ public class Books implements Serializable {
         this.author = author;
     }
 
-    public Timestamp getLaunch_date() {
-        return launch_date;
+    public Timestamp getLaunchDate() {
+        return launchDate;
     }
 
-    public void setLaunch_date(Timestamp launch_date) {
-        this.launch_date = launch_date;
+    public void setLaunchDate(Timestamp launchDate) {
+        this.launchDate = launchDate;
     }
 
     public double getPrice() {
@@ -73,11 +72,11 @@ public class Books implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Books books = (Books) o;
-        return Double.compare(price, books.price) == 0 && Objects.equals(id, books.id) && Objects.equals(author, books.author) && Objects.equals(launch_date, books.launch_date) && Objects.equals(title, books.title);
+        return Double.compare(price, books.price) == 0 && Objects.equals(id, books.id) && Objects.equals(author, books.author) && Objects.equals(launchDate, books.launchDate) && Objects.equals(title, books.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, launch_date, price, title);
+        return Objects.hash(id, author, launchDate, price, title);
     }
 }
