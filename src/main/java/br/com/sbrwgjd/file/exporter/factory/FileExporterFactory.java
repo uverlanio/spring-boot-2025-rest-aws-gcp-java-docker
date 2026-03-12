@@ -4,8 +4,6 @@ import br.com.sbrwgjd.exception.*;
 import br.com.sbrwgjd.file.exporter.*;
 import br.com.sbrwgjd.file.exporter.contract.*;
 import br.com.sbrwgjd.file.exporter.impl.*;
-import br.com.sbrwgjd.file.importer.contract.*;
-import br.com.sbrwgjd.file.importer.impl.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
@@ -19,7 +17,7 @@ public class FileExporterFactory {
     @Autowired
     private ApplicationContext context;
 
-    public FileExporter getExporter(String acceptHeader) {
+    public PersonExporter getExporter(String acceptHeader) {
         if (acceptHeader.equalsIgnoreCase(MediaTypes.APPLICATION_XLSX_VALUE)) {
             return context.getBean(XlsxExporter.class);
         } else if (acceptHeader.equalsIgnoreCase(MediaTypes.APPLICATION_CSV_VALUE)) {

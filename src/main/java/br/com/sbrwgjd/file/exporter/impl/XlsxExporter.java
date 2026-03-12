@@ -1,7 +1,7 @@
 package br.com.sbrwgjd.file.exporter.impl;
 
 import br.com.sbrwgjd.data.dto.PersonDTO;
-import br.com.sbrwgjd.file.exporter.contract.FileExporter;
+import br.com.sbrwgjd.file.exporter.contract.PersonExporter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.core.io.*;
@@ -11,9 +11,9 @@ import java.io.*;
 import java.util.List;
 
 @Component
-public class XlsxExporter implements FileExporter {
+public class XlsxExporter implements PersonExporter {
     @Override
-    public Resource exportFile(List<PersonDTO> people) throws Exception {
+    public Resource exportPeople(List<PersonDTO> people) throws Exception {
 
         try(Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("People");

@@ -6,7 +6,6 @@ import br.com.sbrwgjd.exception.BadRequestException;
 import br.com.sbrwgjd.exception.FileStorageException;
 import br.com.sbrwgjd.exception.RequiredObjectIsNullException;
 import br.com.sbrwgjd.exception.ResourceNotFoundException;
-import br.com.sbrwgjd.file.exporter.*;
 import br.com.sbrwgjd.file.exporter.contract.*;
 import br.com.sbrwgjd.file.exporter.factory.*;
 import br.com.sbrwgjd.file.importer.contract.FileImporter;
@@ -77,7 +76,7 @@ public class PersonServices {
                 .map(entity -> parseObject(entity, PersonDTO.class))
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
-        FileExporter exporter = this.exporter.getExporter(acceptHeader);
+        PersonExporter exporter = this.exporter.getExporter(acceptHeader);
 
         try {
             return exporter.exportPerson(person);
@@ -105,9 +104,9 @@ public class PersonServices {
         var people = personRepository.findAll(pageable)
                 .map(person -> parseObject(person, PersonDTO.class)).getContent();
 
-        FileExporter exporter = this.exporter.getExporter(acceptHeader);
+        PersonExporter exporter = this.exporter.getExporter(acceptHeader);
         try {
-            return exporter.exportFile(people);
+            return exporter.exportPeople(people);
         } catch (Exception e) {
             throw new RuntimeException("Error during file export!", e);
         }

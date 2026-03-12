@@ -1,7 +1,7 @@
 package br.com.sbrwgjd.file.exporter.impl;
 
 import br.com.sbrwgjd.data.dto.PersonDTO;
-import br.com.sbrwgjd.file.exporter.contract.FileExporter;
+import br.com.sbrwgjd.file.exporter.contract.PersonExporter;
 import br.com.sbrwgjd.services.QRCodeService;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class PdfExporter implements FileExporter {
+public class PdfExporter implements PersonExporter {
 
     @Autowired
     private QRCodeService service;
 
     @Override
-    public Resource exportFile(List<PersonDTO> people) throws Exception {
+    public Resource exportPeople(List<PersonDTO> people) throws Exception {
 
         InputStream inputStream = getClass().getResourceAsStream("/templates/people.jrxml");
         if(inputStream == null) {
@@ -41,7 +41,7 @@ public class PdfExporter implements FileExporter {
         Map<String,Object> parameters = new HashMap<>();
         //parameters.put("title", "People Report");
 
-        //jasperReport.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
+        jasperReport.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -74,7 +74,6 @@ public class PdfExporter implements FileExporter {
         String path = getClass().getResource("/templates/books.jasper").getPath();
 
         Map<String, Object> parameters = new HashMap<>();
-        //parameters.put("PERSON_ID", person.getId());
         parameters.put("SUB_REPORT_DATA_SOURCE", subReportDataSource);
         parameters.put("BOOK_SUB_REPORT", subReport);
         parameters.put("SUB_REPORT_DIR", path);
