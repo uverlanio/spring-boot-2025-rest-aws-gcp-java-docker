@@ -183,9 +183,9 @@ class BookControllerYamlTest {
 
         assertNotNull(book.getId());
         assertTrue(book.getId() > 0);
-        assertEquals("Livro 15", book.getTitle());
-        assertEquals("Autor 15", book.getAuthor());
-        assertEquals(96.8, book.getPrice());
+        assertEquals("Agile Estimating and Planning", book.getTitle());
+        assertEquals("Mike Cohn", book.getAuthor());
+        assertEquals(112.87, book.getPrice());
     }
 
     private void mockBook() {
@@ -193,6 +193,6 @@ class BookControllerYamlTest {
         book.setTitle("Crônicas de um Futuro Esquecido");
         book.setAuthor("Alana V. Kepler");
         book.setPrice(59.90);
-        book.setLaunch_date(new Timestamp(System.currentTimeMillis()));
+        book.setLaunchDate(new Timestamp(System.currentTimeMillis()));
     }
 }

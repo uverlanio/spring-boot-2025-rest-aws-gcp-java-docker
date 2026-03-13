@@ -17,7 +17,7 @@ public class BooksDTO implements Serializable{
 
     private String author;
 
-    private Timestamp launch_date;
+    private Timestamp launchDate;
 
     private double price;
 
@@ -39,12 +39,12 @@ public class BooksDTO implements Serializable{
         this.author = author;
     }
 
-    public Timestamp getLaunch_date() {
-        return launch_date;
+    public Timestamp getLaunchDate() {
+        return launchDate;
     }
 
-    public void setLaunch_date(Timestamp launch_date) {
-        this.launch_date = launch_date;
+    public void setLaunchDate(Timestamp launchDate) {
+        this.launchDate = launchDate;
     }
 
     public double getPrice() {
@@ -67,11 +67,11 @@ public class BooksDTO implements Serializable{
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         BooksDTO booksDTO = (BooksDTO) o;
-        return Double.compare(price, booksDTO.price) == 0 && Objects.equals(id, booksDTO.id) && Objects.equals(author, booksDTO.author) && Objects.equals(launch_date, booksDTO.launch_date) && Objects.equals(title, booksDTO.title);
+        return Double.compare(price, booksDTO.price) == 0 && Objects.equals(id, booksDTO.id) && Objects.equals(author, booksDTO.author) && Objects.equals(launchDate, booksDTO.launchDate) && Objects.equals(title, booksDTO.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, launch_date, price, title);
+        return Objects.hash(id, author, launchDate, price, title);
     }
 }

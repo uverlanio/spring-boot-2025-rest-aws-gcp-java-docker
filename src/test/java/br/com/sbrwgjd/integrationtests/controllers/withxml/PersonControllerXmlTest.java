@@ -191,11 +191,11 @@ class PersonControllerXmlTest {
 
         assertNotNull(person.getId());
         assertTrue(person.getId() > 0);
-        assertEquals("Aldus", person.getFirstName());
-        assertEquals("Skeermer", person.getLastName());
-        assertEquals("Apt 459", person.getAddress());
-        assertEquals("Male", person.getGender());
-        assertFalse(person.getEnabled());
+        assertEquals("Adelaida", person.getFirstName());
+        assertEquals("Renard", person.getLastName());
+        assertEquals("Room 717", person.getAddress());
+        assertEquals("Female", person.getGender());
+        assertFalse(!person.getEnabled());
     }
 
     @Test
@@ -221,11 +221,11 @@ class PersonControllerXmlTest {
 
         assertNotNull(person.getId());
         assertTrue(person.getId() > 0);
-        assertEquals("Cleavland", person.getFirstName());
-        assertEquals("Simoneschi", person.getLastName());
-        assertEquals("Room 1395", person.getAddress());
-        assertEquals("Male", person.getGender());
-        assertFalse(person.getEnabled());
+        assertEquals("Brandie", person.getFirstName());
+        assertEquals("Mengue", person.getLastName());
+        assertEquals("Suite 36", person.getAddress());
+        assertEquals("Female", person.getGender());
+        assertFalse(!person.getEnabled());
     }
 
     /*@Test

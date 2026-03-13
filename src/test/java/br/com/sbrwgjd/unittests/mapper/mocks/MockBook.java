@@ -47,7 +47,7 @@ public class MockBook {
         BooksDTO book = new BooksDTO();
         book.setTitle("O Hobbit"+number);
         book.setAuthor("J.R.R. Tolkien"+number);
-        book.setLaunch_date(Timestamp.from(Instant.now()));
+        book.setLaunchDate(Timestamp.from(Instant.now()));
         book.setId(number.longValue());
         book.setPrice(125.50);
         return book;
