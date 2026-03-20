@@ -20,7 +20,7 @@ import java.util.Objects;
 public class BookController implements BookControllerDocs {
 
     @Autowired
-    private BookServices bookServices;
+    private BookService bookServices;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
    @Override

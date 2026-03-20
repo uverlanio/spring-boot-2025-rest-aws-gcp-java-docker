@@ -37,9 +37,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonServices {
+public class PersonService {
 
-    Logger logger = LoggerFactory.getLogger(PersonServices.class.getName());
+    Logger logger = LoggerFactory.getLogger(PersonService.class.getName());
 
     @Autowired
     PersonRepository personRepository;

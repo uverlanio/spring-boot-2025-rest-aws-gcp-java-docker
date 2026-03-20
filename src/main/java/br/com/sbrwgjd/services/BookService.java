@@ -22,9 +22,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class BookServices {
+public class BookService {
 
-    Logger logger = LoggerFactory.getLogger(BookServices.class.getName());
+    Logger logger = LoggerFactory.getLogger(BookService.class.getName());
 
     @Autowired
     BookRepository bookRepository;

@@ -3,7 +3,6 @@ package br.com.sbrwgjd.controllers;
 import br.com.sbrwgjd.controllers.docs.PersonControllerDocs;
 import br.com.sbrwgjd.data.dto.PersonDTO;
 import br.com.sbrwgjd.file.exporter.MediaTypes;
-import br.com.sbrwgjd.file.exporter.impl.*;
 import br.com.sbrwgjd.services.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +37,7 @@ import java.util.*;
 public class PersonController implements PersonControllerDocs {
 
     @Autowired
-    private PersonServices personServices;
+    private PersonService personServices;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override

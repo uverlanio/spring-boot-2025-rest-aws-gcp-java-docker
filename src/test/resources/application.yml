@@ -43,6 +43,11 @@ cors:
   originPatterns: http://localhost:8080,http://prontuarios-jaala.com
 file:
   upload-dir: /Code/UploadDir
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-lenght: 3600000
 email:
   subject: "Default Subject"
   message: "Default Message"
