@@ -1,5 +1,6 @@
 package br.com.sbrwgjd.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public class User implements UserDetails, Serializable {
     private Long id;
 
     @Column(name = "user_name", unique = true, nullable = false)
-    private String username;
+    private String userName;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
@@ -61,9 +62,10 @@ public class User implements UserDetails, Serializable {
 
     public List<String> getRoles(){
         List<String> roles = new ArrayList<>();
-        permissions.forEach(permission -> {
+
+        for (Permission permission : permissions) {
             roles.add(permission.getDescription());
-        });
+        }
 
         return roles;
     }
@@ -75,12 +77,12 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public String getPassword() {
-        return this.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return this.getUsername();
+        return this.userName;
     }
 
     @Override
@@ -107,8 +109,8 @@ public class User implements UserDetails, Serializable {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String userName) {
+        this.userName = userName;
     }
 
     public String getFullName() {
@@ -167,11 +169,11 @@ public class User implements UserDetails, Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(fullName, user.fullName) && Objects.equals(password, user.password) && Objects.equals(accountNonExpired, user.accountNonExpired) && Objects.equals(accountNonLocked, user.accountNonLocked) && Objects.equals(credentialsNonExpired, user.credentialsNonExpired) && Objects.equals(enabled, user.enabled) && Objects.equals(permissions, user.permissions);
+        return Objects.equals(id, user.id) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(fullName, user.fullName) && Objects.equals(password, user.password) && Objects.equals(accountNonExpired, user.accountNonExpired) && Objects.equals(accountNonLocked, user.accountNonLocked) && Objects.equals(credentialsNonExpired, user.credentialsNonExpired) && Objects.equals(enabled, user.enabled) && Objects.equals(permissions, user.permissions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, fullName, password, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled, permissions);
+        return Objects.hash(id, getUsername(), fullName, password, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled, permissions);
     }
 }

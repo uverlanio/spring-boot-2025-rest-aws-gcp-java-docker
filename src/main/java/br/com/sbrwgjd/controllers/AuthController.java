@@ -19,7 +19,7 @@ public class AuthController {
 
     @Operation(summary = "Authenticates an user and returns token")
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(AccountCredentialsDTO credentials){
+    public ResponseEntity<?> signin(@RequestBody AccountCredentialsDTO credentials){
 
         if(credentialsIsInvalid(credentials)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     private static boolean credentialsIsInvalid(AccountCredentialsDTO credentials) {
-        return credentials == null || StringUtils.isNotBlank(credentials.getUsername()) || StringUtils.isNotBlank(credentials.getPassword());
+        return credentials == null || StringUtils.isBlank(credentials.getUsername()) || StringUtils.isBlank(credentials.getPassword());
     }
 
 }
