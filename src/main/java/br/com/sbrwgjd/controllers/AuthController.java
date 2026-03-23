@@ -1,5 +1,6 @@
 package br.com.sbrwgjd.controllers;
 
+import br.com.sbrwgjd.data.dto.*;
 import br.com.sbrwgjd.data.dto.security.*;
 import br.com.sbrwgjd.services.*;
 import io.swagger.v3.oas.annotations.*;
@@ -48,6 +49,11 @@ public class AuthController {
         }
 
         return ResponseEntity.ok().body(token);
+    }
+
+    @PostMapping(value = "/createUser", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+    public AccountCredentialsDTO create(@RequestBody AccountCredentialsDTO credentials) {
+        return authService.create(credentials);
     }
 
     private static boolean credentialsIsInvalid(AccountCredentialsDTO credentials) {

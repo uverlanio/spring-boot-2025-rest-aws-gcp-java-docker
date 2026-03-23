@@ -35,7 +35,7 @@ public class StartUp {
 		DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
 		passwordEncoder.setDefaultPasswordEncoderForMatches(encoders.get("pbkdf2"));
 		var pass1 = passwordEncoder.encode("admin123");
-		var pass2 = passwordEncoder.encode("admin234");
+		var pass2 = passwordEncoder.encode("foogaz");
 
 		System.out.println(pass1);
 		System.out.println(pass2);
