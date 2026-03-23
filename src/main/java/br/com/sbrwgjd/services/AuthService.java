@@ -28,7 +28,6 @@ public class AuthService {
                 )
         );
 
-
         var user = userRepository.findByUsername(credentials.getUsername());
 
         if(user == null){
@@ -40,6 +39,18 @@ public class AuthService {
                 user.getRoles()
         );
 
+        return ResponseEntity.ok(token);
+    }
+
+    public ResponseEntity<TokenDTO> refreshToken(String username, String refreshToken){
+
+        var user = userRepository.findByUsername(username);
+        TokenDTO token;
+        if(user != null) {
+            token = jwtTokenProvider.refreshToken(refreshToken);
+        } else {
+            throw new UsernameNotFoundException("Username " + username + " not found!");
+        }
         return ResponseEntity.ok(token);
     }
 }

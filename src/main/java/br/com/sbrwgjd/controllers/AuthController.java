@@ -19,12 +19,29 @@ public class AuthController {
 
     @Operation(summary = "Authenticates an user and returns token")
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody AccountCredentialsDTO credentials){
+    public ResponseEntity<?> signin(@RequestBody AccountCredentialsDTO credentials) {
 
-        if(credentialsIsInvalid(credentials)){
+        if (credentialsIsInvalid(credentials)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         }
         var token = authService.signIn(credentials);
+
+        if (token == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
+        }
+
+        return ResponseEntity.ok().body(token);
+    }
+
+    @Operation(summary = "Refresg token for authenticated user and returns a token")
+    @PutMapping("/refresh/{username}")
+    public ResponseEntity<?> refresh(@PathVariable("username") String username,
+                                     @RequestHeader("Authorization") String refreshToken){
+
+        if(parametersAreIsInvalid(username, refreshToken)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
+        }
+        var token = authService.refreshToken(username, refreshToken);
 
         if(token == null){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
@@ -37,4 +54,7 @@ public class AuthController {
         return credentials == null || StringUtils.isBlank(credentials.getUsername()) || StringUtils.isBlank(credentials.getPassword());
     }
 
+    private static boolean parametersAreIsInvalid(String username, String refreshToken) {
+        return StringUtils.isBlank(username) || StringUtils.isBlank(refreshToken);
+    }
 }
