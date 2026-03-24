@@ -35,11 +35,15 @@ public class AuthService {
     private UserRepository userRepository;
 
     public ResponseEntity<TokenDTO> signIn(AccountCredentialsDTO credentials){
-        authenticationManager.authenticate(
+        try{
+            authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credentials.getUsername(), credentials.getPassword()
                 )
         );
+        } catch (RuntimeException e) {
+            throw new InvalidJwtAuthenticationException(e.getMessage());
+        }
 
         var user = userRepository.findByUsername(credentials.getUsername());
 
