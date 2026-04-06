@@ -31,7 +31,7 @@ public class AuthController implements br.com.sbrwgjd.controllers.docs.AuthContr
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         }
 
-        return ResponseEntity.ok().body(token);
+        return token;
     }
 
     @PutMapping("/refresh/{username}")
@@ -48,7 +48,7 @@ public class AuthController implements br.com.sbrwgjd.controllers.docs.AuthContr
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         }
 
-        return ResponseEntity.ok().body(token);
+        return token;
     }
 
     @Override
