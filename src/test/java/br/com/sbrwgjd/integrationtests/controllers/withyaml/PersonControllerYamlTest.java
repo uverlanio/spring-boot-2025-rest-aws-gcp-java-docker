@@ -2,7 +2,7 @@ package br.com.sbrwgjd.integrationtests.controllers.withyaml;
 
 import br.com.sbrwgjd.config.TestConfigs;
 import br.com.sbrwgjd.integrationtests.controllers.withyaml.mapper.YAMLMapper;
-import br.com.sbrwgjd.integrationtests.dto.PersonDTO;
+import br.com.sbrwgjd.integrationtests.dto.*;
 import br.com.sbrwgjd.integrationtests.dto.wrappers.xmlandyaml.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.builder.RequestSpecBuilder;
@@ -41,20 +41,44 @@ class PersonControllerYamlTest {
     private static RequestSpecification specification;
     private static YAMLMapper mapper;
     private static PersonDTO person;
+    private static TokenDTO tokenDTO;
 
     @BeforeAll
     static void setUp() {
         mapper = new YAMLMapper();
+        person = new PersonDTO();
+        tokenDTO = new TokenDTO();
+    }
+
+    @Test
+    @Order(0)
+    void signin() {
+        AccountCredentialsDTO credentials = new AccountCredentialsDTO("Leandro", "admin123");
+
+        tokenDTO = given()
+                .basePath("/auth/signin")
+                .port(TestConfigs.SERVER_PORT)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(credentials)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(TokenDTO.class);
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getAccessToken())
                 .setBasePath("/api/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL)) // Loga o que está indo na request
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL)) // Loga o que está voltando no response
                 .build();
 
-        person = new PersonDTO();
+        assertNotNull(tokenDTO.getAccessToken());
+        assertNotNull(tokenDTO.getRefreshToken());
     }
 
     @Test

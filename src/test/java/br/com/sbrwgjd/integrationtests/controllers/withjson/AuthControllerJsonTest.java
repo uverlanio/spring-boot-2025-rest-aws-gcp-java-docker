@@ -2,8 +2,6 @@ package br.com.sbrwgjd.integrationtests.controllers.withjson;
 
 import br.com.sbrwgjd.config.*;
 import br.com.sbrwgjd.integrationtests.dto.*;
-import com.fasterxml.jackson.databind.*;
-import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.http.*;
@@ -21,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
         }
 )
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class AuthControllerTest {
+class AuthControllerJsonTest {
 
     private static TokenDTO tokenDTO;
 
