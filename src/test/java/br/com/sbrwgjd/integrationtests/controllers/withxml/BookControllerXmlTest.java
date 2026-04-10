@@ -100,7 +100,7 @@ class BookControllerXmlTest {
 
         assertNotNull(createdBook.getId());
         assertTrue(createdBook.getId() > 0);
-        assertEquals("Crônicas de um Futuro Esquecido", createdBook.getTitle());
+        assertEquals("Cronicas de um Futuro Esquecido", createdBook.getTitle());
         assertEquals("Alana V. Kepler", createdBook.getAuthor());
         assertEquals(59.90, createdBook.getPrice());
 
@@ -110,7 +110,7 @@ class BookControllerXmlTest {
     @Order(2)
     void updateTest() throws JsonProcessingException {
 
-        book.setTitle("O Último Guardião do Orvalho");
+        book.setTitle("O Ultimo Guardiao do Orvalho");
 
         var content = given(specification)
                 .contentType(MediaType.APPLICATION_XML_VALUE)
@@ -130,7 +130,7 @@ class BookControllerXmlTest {
 
         assertNotNull(createdBook.getId());
         assertTrue(createdBook.getId() > 0);
-        assertEquals("O Último Guardião do Orvalho", createdBook.getTitle());
+        assertEquals("O Ultimo Guardiao do Orvalho", createdBook.getTitle());
         assertEquals("Alana V. Kepler", createdBook.getAuthor());
         assertEquals(59.90, createdBook.getPrice());
     }
@@ -156,7 +156,7 @@ class BookControllerXmlTest {
 
         assertNotNull(createdBook.getId());
         assertTrue(createdBook.getId() > 0);
-        assertEquals("O Último Guardião do Orvalho", createdBook.getTitle());
+        assertEquals("O Ultimo Guardiao do Orvalho", createdBook.getTitle());
         assertEquals("Alana V. Kepler", createdBook.getAuthor());
         assertEquals(59.90, createdBook.getPrice());
     }
@@ -190,7 +190,7 @@ class BookControllerXmlTest {
 
     private void mockBook() {
 
-        book.setTitle("Crônicas de um Futuro Esquecido");
+        book.setTitle("Cronicas de um Futuro Esquecido");
         book.setAuthor("Alana V. Kepler");
         book.setPrice(59.90);
         book.setLaunchDate(new Timestamp(System.currentTimeMillis()));
