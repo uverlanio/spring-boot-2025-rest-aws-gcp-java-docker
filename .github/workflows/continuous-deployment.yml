@@ -21,8 +21,25 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
+      - name: Setup Java 21
       - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '21'
           cache: maven
+
+      - name: Build Application .jar
+        working-directory: ./spring-boot-2025-rest-aws-gcp-java-docker
+        run: mvn clean package
+
+      - name: Docker Compose Build
+        working-directory: ./
+        run: docker compose build
+
+      - name: Push to Docker Hub Container Registry
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/spring-boot-2025-rest-aws-gcp-java-docker:latest ${{ secrets.DOCKER_USERNAME }}/spring-boot-2025-rest-aws-gcp-java-docker:${{ github.run_id }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/spring-boot-2025-rest-aws-gcp-java-docker:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/spring-boot-2025-rest-aws-gcp-java-docker:${{ github.run_id }}
+          
+          
