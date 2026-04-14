@@ -2,8 +2,7 @@ name: Continuous Integration and Delivery with Github Actions
 
 on:
   push:
-    branches:
-      - "secao_28"
+    branches: [ 'secao_28' ]
 
 jobs:
 
@@ -34,7 +33,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Docker Compose Build
-        working-directory: ./docker-compose
+        working-directory: ../docker-compose
         run: docker compose build
 
       - name: Push to Docker Hub Container Registry
