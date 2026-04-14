@@ -26,7 +26,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '21'
-          cache: maven
+          cache: 'maven'
 
       - name: Build Application .jar
         working-directory: ./
