@@ -35,7 +35,7 @@ jobs:
 
       - name: Docker Compose Build
 
-        run: docker compose -f spring-boot-2025-rest-aws-gcp-java-docker/docker-compose.yml build
+        run: docker compose -f ./spring-boot-2025-rest-aws-gcp-java-docker/docker-compose.yml build
 
       - name: Push to Docker Hub Container Registry
         run: |
