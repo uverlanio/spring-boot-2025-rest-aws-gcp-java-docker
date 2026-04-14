@@ -42,7 +42,7 @@ spring:
 cors:
   originPatterns: http://localhost:8080,http://prontuarios-jaala.com
 file:
-  upload-dir: ${java.io.tmpDir}/UploadDir
+  upload-dir: /${java.io.tmpdir}/UploadDir
 security:
   jwt:
     token:
