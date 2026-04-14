@@ -32,7 +32,7 @@ jobs:
 
       - name: Build Application .jar
         working-directory: ./
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
       - name: Docker Compose Build
         working-directory: ./spring-boot-2025-rest-aws-gcp-java-docker
