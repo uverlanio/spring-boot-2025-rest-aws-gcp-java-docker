@@ -42,7 +42,7 @@ spring:
 cors:
   originPatterns: http://localhost:8080,http://prontuarios-jaala.com
 file:
-  upload-dir: /Code/UploadDir
+  upload-dir: /home/runner/work/spring-boot-2025-rest-aws-gcp-java-docker/UploadDir
 security:
   jwt:
     token:
