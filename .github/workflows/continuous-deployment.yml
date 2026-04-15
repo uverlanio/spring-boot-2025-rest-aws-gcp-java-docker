@@ -24,9 +24,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-          cache: 'maven'
-          check-latest: false
-          cache-dependency-path: '**/pom.xml'
+          #cache: 'maven'
+          #check-latest: false
+          #cache-dependency-path: '**/pom.xml'
 
       - name: Build Application .jar
         working-directory: ./
