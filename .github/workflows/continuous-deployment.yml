@@ -24,7 +24,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-          #cache: 'maven'
+          cache: 'maven'
           #check-latest: false
           #cache-dependency-path: '**/pom.xml'
 
