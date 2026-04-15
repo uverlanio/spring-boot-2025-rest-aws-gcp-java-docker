@@ -36,7 +36,7 @@ jobs:
 
       - name: Push to Docker Hub Container Registry
         run: |
-          docker tag ${secrets.DOCKER_USERNAME}/spring-boot-2025-rest-aws-gcp-java-docker:latest ${{ secrets.DOCKER_USERNAME }}/spring-boot-2025-rest-aws-gcp-java-docker:${{ github.run_id }}
+          docker tag ${secrets.DOCKER_USERNAME}/spring-boot-2025-rest-aws-gcp-java-docker:latest ${secrets.DOCKER_USERNAME}/spring-boot-2025-rest-aws-gcp-java-docker:${{ github.run_id }}
           docker push ${secrets.DOCKER_USERNAME}/spring-boot-2025-rest-aws-gcp-java-docker:latest
           docker push ${secrets.DOCKER_USERNAME}/spring-boot-2025-rest-aws-gcp-java-docker:${{ github.run_id }}
           
