@@ -19,7 +19,7 @@ services:
   spring-boot-2025-rest-aws-gcp-java-docker:
     image: uverdocker/spring-boot-2025-rest-aws-gcp-java-docker
     restart: always
-    build: ./spring-boot-2025-rest-aws-gcp-java-docker
+    build: .
     working_dir: /spring-boot-2025-rest-aws-gcp-java-docker
     environment:
       TZ: America/Sao_Paulo
