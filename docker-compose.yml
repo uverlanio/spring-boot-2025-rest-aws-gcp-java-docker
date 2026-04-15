@@ -1,5 +1,3 @@
-name: spring-boot-2025-rest-aws-gcp-java-docker
-
 services:
   db:
     image: mysql:9.1.0
@@ -33,6 +31,20 @@ services:
       - db
     networks:
       - sb-network
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - sb-network
+
+volumes:
+  portainer_data:
+
 networks:
   sb-network:
     driver: bridge
