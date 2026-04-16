@@ -31,8 +31,9 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Docker Compose Build
+
         working-directory: ./
-        run: docker compose build
+        run: docker build -t uverdocker/spring-boot-2025-rest-aws-gcp-java-docker:latest .
 
       - name: Push to Docker Hub Container Registry
         run: |
