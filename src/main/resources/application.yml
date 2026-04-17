@@ -8,9 +8,9 @@ spring:
     name: spring-boot-2025-rest-aws-gcp-java-docker
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/DB_UDEMY?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
+    url: jdbc:mysql://db-server.cluia8m4g06o.us-east-2.rds.amazonaws.com/DB_UDEMY?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
     username: root
-    password: admin
+    password: admin123
   jpa:
     hibernate:
       ddl-auto: none # importante na utilizacao de migration (somente leitura)
