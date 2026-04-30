@@ -20,9 +20,9 @@ services:
     working_dir: /spring-boot-2025-rest-aws-gcp-java-docker
     environment:
       TZ: America/Sao_Paulo
-      SPRING.DATASOURCE.URL: jdbc:mysql://db:3306/DB_UDEMY?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
+      SPRING.DATASOURCE.URL: jdbc:mysql://udemy-db-server.cluia8m4g06o.us-east-2.rds.amazonaws.com/db_udemy?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
       SPRING.DATASOURCE.USERNAME: root
-      SPRING.DATASOURCE.PASSWORD: admin
+      SPRING.DATASOURCE.PASSWORD: admin123
     command: mvn spring-boot:run
     ports:
       - 80:80
