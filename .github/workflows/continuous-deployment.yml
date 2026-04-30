@@ -2,7 +2,7 @@ name: Continuous Integration and Delivery with Github Actions
 
 on:
   push:
-    branches: [ 'secao_28' ]
+    branches: [ 'secao_30' ]
 
 jobs:
 
