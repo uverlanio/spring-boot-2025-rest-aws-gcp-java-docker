@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8080
 spring:
   flyway:
     validate-on-migrate: true
@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${JDBC_URL}
     username: root
-    password: admin123
+    password: Admin123@
   jpa:
     hibernate:
       ddl-auto: none # importante na utilizacao de migration (somente leitura)
